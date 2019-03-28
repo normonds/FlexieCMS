@@ -1,0 +1,1 @@
+sudo firebase serve -p 5001

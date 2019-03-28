@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html><head>
+<script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.14/stitch.js"></script>
+</head>
+
+<body>
+<button id="login" onClick="stitchLogin()">login</button>
+<button id="login" onClick="stitchLoginCheck()">logged in?</button>
+<!--<textarea id="area" cols="150" rows="200"></textarea>-->
+<script>
+window.addEventListener("load", function(event) {
+	console.log("All resources finished loading!");
+	console.log(client.auth.isLoggedIn, client.auth);
+
+	if (client.auth.isLoggedIn) {
+		/*client.callFunction("function0", [3, 4]).then(result => {
+			 console.log(result) // Output: 7
+		}).catch(err => {
+		 console.error(err)
+	  })*/
+	
+
+
+	
+    db.collection('__flexi_conf').insertOne({})
+  .then(() => 
+    db.collection('__flexi_conf').find({}, { limit: 100}).asArray()
+  ).then(docs => {
+		   console.log("Found docs", docs)
+		   console.log("[MongoDB Stitch] Connected to Stitch")
+	  }).catch(err => {
+		 console.error(err)
+	  });
+
+
+	} else {
+		console.log('Not logged in');
+	}
+
+  
+
+
+});
+//function log (str) {
+//	console.log(str);
+	//document.getElementById('area').value += ("\n" + str);
+//}
+
+const {
+ Stitch,
+ GoogleRedirectCredential
+} = stitch;
+
+
+
+const client = stitch.Stitch.initializeDefaultAppClient('ri-stitch-piwyk');
+const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('noonidb');
+if (client.auth.hasRedirectResult()) {
+    client.auth.handleRedirectResult().then(user => {
+        console.log("handleRedirectResult", user);
+    });
+}
+function stitchLogin() {
+	if (!client.auth.isLoggedIn) {
+		 const credential = new GoogleRedirectCredential();
+		 Stitch.defaultAppClient.auth.loginWithRedirect(credential);
+	}
+}
+function stitchLoginCheck() {
+	console.log(client.auth.isLoggedIn, client.auth);
+}
+/*
+
+
+if (client.auth.isLoggedIn) {
+	log(client.auth);
+}
+
+
+*/
+
+</script>
+</body></html>

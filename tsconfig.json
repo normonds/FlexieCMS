@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "outDir": "./tsc.output/",
+      "sourceMap": true,
+      "noImplicitAny": false,
+      "module": "commonjs",
+      "target": "es6",
+      "jsx": "react",
+	  	"baseUrl": "./",
+
+		"paths": {
+		  "react" : ["./typings/react"],
+		  "react-dom" : ["./typings/react-dom"]
+		}
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}

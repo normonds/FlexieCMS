@@ -1,0 +1,10 @@
+runtime: php55
+api_version: 1
+
+handlers:
+
+- url: /(.*\.(php))$
+  script: \1
+
+#- url: /
+#  script: index.php
