@@ -54,7 +54,7 @@ fieldset {border: 2px solid rgba(255,255,255,0.15);background-color:rgba(255,255
 
 .errorColor {color:red;}
 
-.cell-content-wrap {word-break: break-word;}
+.cell-content-wrap {word-break: break-word;margin-left:4px;}
 .github {opacity:0.12;}
 .github:hover {opacity:1;}
 
