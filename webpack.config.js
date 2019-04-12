@@ -12,6 +12,7 @@ module.exports = {
 	 stats: {
 		  warningsFilter: /String of some kind of specific error somewhere/
 	 },
+    performance: { hints: false },
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: ["d.ts", ".ts", ".tsx", ".js", ".json"]
