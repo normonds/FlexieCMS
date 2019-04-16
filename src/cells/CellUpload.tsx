@@ -112,6 +112,9 @@ contentModeView () : JSX.Element {
 	let files:Array<JSX.Element >= [];
 	let incValue:any = this.cell().value;
 	let isUploading = false;
+	if (!incValue) {
+		incValue = [];
+	}
 	//console.log('CELL UPLOAD contentModeView state', this.state);
 	if (Array.isArray(incValue)) {
 		incValue.forEach((filename:string, indx:number) => {

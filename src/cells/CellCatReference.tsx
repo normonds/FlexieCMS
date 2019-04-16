@@ -60,12 +60,12 @@ export class Categories {
 			// console.log('retMap', key, val);
 			// if (catIDsCell.get(key)) {
 				if (val.split('.').length==1) {
-					strSpace = /*String.fromCharCode(160) + String.fromCharCode(160)+*/ '⮤ ';
+					strSpace = /*String.fromCharCode(160) + String.fromCharCode(160)+*/ '↑ ';
 					//catIDsCell.get(key).value = catIDsTitle.get(key);
 					catIDsTitleSpaced.set(key, strSpace + '' + catIDsTitle.get(key));
 					catIDsNumerated.set(key, val);
 				} else {
-					strSpace = val.replace(/./g, String.fromCharCode(160) + String.fromCharCode(160)) + '⮤ ';
+					strSpace = val.replace(/./g, String.fromCharCode(160) + String.fromCharCode(160)) + '↑ ';
 					//catIDsCell.get(key).value = strSpace + catIDsTitle.get(catIDsIDs.get(key));// + val;
 					catIDsTitleSpaced.set(key, strSpace + '' +  catIDsTitle.get(key));
 					catIDsNumerated.set(key, val);
