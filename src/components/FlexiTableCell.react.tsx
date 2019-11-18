@@ -372,7 +372,7 @@ render () { let _:FlexiTableCellReact<P> = this;
 			} else {
 				let outTypeof = typeof out;
 
-				if (outTypeof == 'string' && /<[a-z][\s\S]*>/i.test(out)) addViewAsHTML = <React.Fragment><a
+				if (outTypeof == 'string' && /<[a-z][\s\S]*>/i.test(out)) addViewAsHTML = <React.Fragment>&nbsp;<a
 					href={ this.linkToCell()} className="viewContent" onClick={this.onClickViewContent.bind(this, this.linkToCell())}
 					>view&nbsp;as&nbsp;html&nbsp;<i className="material-icons" style={{fontSize: '14px'}}>open_in_new</i>
 				</a></React.Fragment>;

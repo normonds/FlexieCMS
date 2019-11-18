@@ -1,0 +1,28 @@
+:root {
+	--page-bg: #333;
+	--page-color: #FFF;
+	--a-color: rgba(255, 97, 0, .8);
+	--a-color-bg: rgba(0, 0, 0, .1);
+	--a-color-hover: rgba(255, 255, 255, 0.7);
+	--a-color-hover-bg: rgba(0, 0, 0, 1);
+
+
+	--th-bg-col: #003C62;
+	--td-border-col: #004C62;
+
+	--header-a-color: #FFF;
+	--header-bg-col: rgba(139, 56, 1, .80);
+	--header-selected-bg-col: rgba(51, 51, 51, 1);
+	--auth-email-opacity: 0.7;
+	--auth-font-weight: normal;
+
+	--nodef-bg-col: #004C62;
+	--table-border-col: #004C62;
+	--cell-caption-bg: rgba(149, 51, 0, .7);
+	--editable-hover-bg-col: #004C62;
+
+	--input-text-col: #FFF;
+	--input-text-col-05: rgba(255, 255, 255, 0.5);
+	--input-bg-0135: rgba(255, 255, 255, 0.135);
+	--upload-block-bg-col: rgba(0, 0, 0, .5);
+}

@@ -1,0 +1,43 @@
+{
+
+    "editor.tokenColorCustomizations": {
+        //"textMateRules": [],
+        //"[Solarized Dark]": {
+            "textMateRules": [
+                {
+                    "scope": "storage",
+                    "settings": {
+                        "foreground": "#FF0000"
+                    }
+                },
+                {
+                    "scope": "keyword",
+                    "settings": {
+                        "foreground": "#FF0000"
+                    }
+                },
+                {
+                    "scope": "string",
+                    "settings": {
+                        "foreground": "#00FF00"
+                    }
+                },
+                {
+                    "scope": "entity.name.type",
+                    "settings": {
+                        "foreground": "#ff0000",
+                        
+                        "fontStyle": "italic",
+                    }
+                },
+                {
+                    "scope": "variable.other.constant.property.tsx",
+                    "settings": {
+                        
+                        "foreground": "#ffd000"
+                    }
+                },
+            ]
+        //}
+    }
+}

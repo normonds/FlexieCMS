@@ -4,6 +4,7 @@ flexi.iml
 .assets/
 .idea/
 functions/
+certificates/
 todo.txt
 package-lock.json
 .firebaserc

@@ -13,6 +13,8 @@ import { DBType, eCookie, iFlexiCell, iFlexiTable, iFlexiTableConfField, iFlexiT
 const BSON = require('bson');
 const ObjectID = BSON.ObjectId;
 
+
+
 export class App {
 	static configTableName = '__flexi_conf';
 	static STORE : iSTORE;
@@ -28,14 +30,23 @@ export class App {
 	static FIELD_ROW_ID : string = '_id';
 	static categoriesUseBarColumn :boolean = false;
 	static mouseIsDown : boolean = false;
-
+	static obje:Object = {};
+	//lala : string ='12312';
 	static errorClear (id : string) {
 		App.STORE.warnings.delete(id);
 		App.update();
 	}
+	erro () {
+		let app = new App();
+		app.erro();
+		//app.lala = '123';
+		App.errorClearAll(null);
+		App.emiter.removeAllListeners();
+	}
 	static errorClearAll (id : string) {
 		App.STORE.warnings.clear();
 		App.update();
+		//let pp:App = new App();
 	}
 	static log (warning: any, warnLevel = WarningLevel.LOG) {
 		console.error(warning);
