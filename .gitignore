@@ -6,7 +6,6 @@ flexi.iml
 functions/
 certificates/
 todo.txt
-package-lock.json
 .firebaserc
 
 # Logs
