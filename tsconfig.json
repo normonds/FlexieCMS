@@ -6,12 +6,9 @@
       "module": "commonjs",
       "target": "es6",
       "jsx": "react",
-	  	"baseUrl": "./",
+	  	"baseUrl": "./"
 
-		"paths": {
-		  "react" : ["./typings/react"],
-		  "react-dom" : ["./typings/react-dom"]
-		}
+
     },
     "include": [
         "./src/**/*"

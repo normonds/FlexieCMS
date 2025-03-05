@@ -5,7 +5,7 @@ import { eFieldType, iFlexiCell, iFlexiTableConfField } from "../Interfaces";
 import { AppReact } from "./App.react";
 import { AppUtils, eCellValType } from "../AppUtils";
 import { eServerItemModifyState, EventApp, iAppEvent } from "../Events";
-import { Editor } from '@tinymce/tinymce-react';
+//import { Editor } from '@tinymce/tinymce-react';
 import { SyntheticEvent } from "react";
 import { iCellProps } from "./FlexiTableRow.react";
 const BSON = require('bson');
@@ -221,22 +221,23 @@ id () {
 idControls () {
 	return 'editor_' + this.props.table.id+'_'+this.props.rowIndx+'_'+this.props.col;
 }
-contentModeView () : JSX.Element { return null;}
-contentModeEdit () : JSX.Element {	return null; }
-jsxFullEditor (editingValue : string) : JSX.Element {
-	return <Editor
-		initialValue={editingValue} onInit={this.editorLoadContent.bind(this)} onChange={this.handleEditorChange.bind(this)}
-		init={{
-			width: 600, height: 400, plugins: 'link image code',
-			toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
-		}}
-	/>;
+contentModeView () : React.JSX.Element { return null;}
+contentModeEdit () : React.JSX.Element {	return null; }
+jsxFullEditor (editingValue : string) : React.JSX.Element {
+	return <></>
+	// <Editor
+		// initialValue={editingValue} onInit={this.editorLoadContent.bind(this)} onChange={this.handleEditorChange.bind(this)}
+		// init={{
+			// width: 600, height: 400, plugins: 'link image code',
+			// toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+		// }}
+	// />;
 }
 changeCellType (e) {
 	this.convertCellOnSaveTo = e.target.value;
 	// console.log('changeCellType' , e.target.value);
 }
-jsxEditingTools () : JSX.Element {
+jsxEditingTools () : React.JSX.Element {
 	let butDelete;
 	let typeSelect;
 
@@ -273,7 +274,7 @@ valToStr (anyVal : any) : string {
 	}
 	return ret;
 }
-basicFieldEditor (editingValue : any) : JSX.Element { let _ = this;
+basicFieldEditor (editingValue : any) : React.JSX.Element { let _ = this;
 	let longestLine = 40, linesCount =2;
 	if (typeof editingValue == 'string') {
 		let lines = editingValue.split(/\r\n|\r|\n/);
@@ -320,12 +321,12 @@ render () { let _:FlexiTableCellReact<P> = this;
 	if (!confs) confs = {};
 	let outValue:any = !_.isEmpty() ? cell.value : '';//AppUtils.wrapValueWithType(AppReact.cellVal(cell.value), cell.value) : '';
 	let out :any = <React.Fragment></React.Fragment>;
-	let outEditTools :JSX.Element;
+	let outEditTools :React.JSX.Element;
 	let style = {}, addViewAsHTML = <React.Fragment></React.Fragment>;
 	let shortenedOutText = '';
 
 	// console.log('Cell RENDER');
-	let editingValue:string, textarea:JSX.Element;
+	let editingValue:string, textarea:React.JSX.Element;
 	out = outValue;
 
 	// console.log(this.state.isEditing, this.props.store.isDirectEditingEnabled);

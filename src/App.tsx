@@ -1,21 +1,21 @@
 import { AppReact } from "./components/App.react";
 
-import * as EventEmitter from "eventemitter3";
+import { EventEmitter} from "eventemitter3";
 import { eTableType, eServerItemModifyState, EventApp, EventServer, iAppEvent } from "./Events";
 import * as ReactDOM from "react-dom";
 import * as React from "react";
-import { AuthStitch } from "./components/AuthStitch";
+
+ import { AuthStitch } from "./components/AuthStitch";
 import { MongoStitchXHR } from "./components/MongoStitchXHR";
 import { AppUtils } from "./AppUtils";
 import { Categories, CellCatReference, iCategoriesReference } from "./cells/CellCatReference";
 import { FlexiTableStatic } from "./FlexiTableStatic";
-import { DBType, eCookie, iFlexiCell, iFlexiTable, iFlexiTableConfField, iFlexiTableConfs, iSTORE, WarningLevel } from "./Interfaces";
+import { CellDirection, DBType, eCookie, iFlexiCell, iFlexiTable, iFlexiTableConfField, iFlexiTableConfs, iSTORE, WarningLevel } from "./Interfaces";
 const BSON = require('bson');
 const ObjectID = BSON.ObjectId;
 
-
-
 export class App {
+	static rootNode : any
 	static configTableName = '__flexi_conf';
 	static STORE : iSTORE;
 	static emiter : EventEmitter;
@@ -33,6 +33,7 @@ export class App {
 	static obje:Object = {};
 	//lala : string ='12312';
 	static errorClear (id : string) {
+		
 		App.STORE.warnings.delete(id);
 		App.update();
 	}
@@ -46,7 +47,7 @@ export class App {
 	static errorClearAll (id : string) {
 		App.STORE.warnings.clear();
 		App.update();
-		//let pp:App = new App();
+		// let pp:App = new App();
 	}
 	static log (warning: any, warnLevel = WarningLevel.LOG) {
 		console.error(warning);
@@ -75,6 +76,8 @@ export class App {
 	}
 	static update () {
 		// let starttime = Date.now();
+		//console.log(ReactDOM)
+		//App.rootNode.render(<AppReact store={App.STORE}/>)
 		ReactDOM.render(<AppReact store={App.STORE}/>, document.getElementById("root"));
 		// console.log('ReactDOM.render', Date.now()-starttime);
 	}
@@ -115,14 +118,17 @@ export class App {
 			, {id:'flexi-cms-elihz', db:'flexi-cms-conf'}
 		];*/
 
-		// AuthStitch.init('ri-stitch-piwyk', 'noonidb');
+		AuthStitch.init('ri-stitch-piwyk', 'noonidb');
 		//AuthStitch.renderLogin();
 	}
 	init () {
 		//console.warn(AppUtils.getCookie());
 		//AppUtils.setCookie(JSON.stringify(App.STORE.appList), 10);
 		// App.logError('herro');
-		App.readAndSetUrlVarsIfExists();
+		
+		// @ts-ignor
+		//App.rootNode = ReactDOM.render(document.getElementById("root"))
+		App.readAndSetUrlVarsIfExists()
 
 		if (App.STORE.appID && App.STORE.appDB) {
 			AppUtils.storageSave(eCookie.APP_ACTIVE, [App.STORE.appID, App.STORE.appDB]);
@@ -136,7 +142,8 @@ export class App {
 			console.warn('JSON cookie parse error' + e);
 		}
 
-		console.warn(cookieAppList, cookieAppActive);
+		//console.warn(cookieAppList, cookieAppActive);
+
 		if (cookieAppList) App.STORE.appList = cookieAppList;
 
 		if (!App.STORE.appID || !App.STORE.appDB) {
@@ -156,10 +163,35 @@ export class App {
 			}
 		}
 		App.STORE.isDevMode = App.readDevModeClientPref();
-		AuthStitch.init(App.STORE.appID, App.STORE.appDB);
+		//AuthStitch.init(App.STORE.appID, App.STORE.appDB);
 
 		if (App.STORE.urlRow && App.STORE.urlCol && App.STORE.urlTable) {}
 		else App.update();
+
+		/* App.STORE.configDB = {defaultTable:'defaultTable', tables:'defaultTable,extraTable', rowsPerPage:20}
+		App.STORE.configDB.tablesConf = {
+			defaulTable:{rowCount:10, description:"desc", showFullTexts:true
+				, maxFieldChars:300, categoriesParentTitleField:'', name:'', subtable:''
+				, rowsPerPage:20, onInsertNewAddAuthEmailToField:'', tableType:eTableType.STANDARD
+				, cellDirection:CellDirection.HORIZONTAL, idCol:'_id', fields:[], flexiAppMetaTable:''}
+
+		}  */
+		//App.STORE.authorizedEmail = 'user@domain.com'
+		// App.STORE.authorizedName = 'user'
+
+		App.update()
+		//App.emit(new EventApp(EventApp.nm.TablesList, App.STORE.configDB.tables.split(',')));
+		/*App.emiter.on(EventApp.nm.TableGetRequest, ()=>{
+			console.log('emitting', EventServer.nm.Table)
+			App.emit(new EventServer(
+
+				EventServer.nm.Table, {
+					dbObj:{res:[{"_id":"507f1f77bcf86cd799439011","two":345,"three":'234'}]}
+				}, {data:{tableID:'defaultTable'}, eventName:EventServer.nm.Table}, Date.now()
+				
+			))
+		}) */
+
 	}
 
 	static windowPopState (eve) {
@@ -223,9 +255,15 @@ export class App {
 		// console.log('setTablesList', eve.data);
 		//setTimeout(App.setTablesList, 3000, {data:['herro',Math.random().toString()]});
 		App.STORE.header.tableTabs = [];
+		//console.log(App.STORE)
 		if (Array.isArray(eve.data)) {
 			eve.data.forEach((label:string, indx:number) => {
-				App.STORE.header.tableTabs.push({label:label, codename:label});
+				let lbl = label
+				//console.warn(App?.STORE?.configDB?.tablesConf[label]?.name)
+				if (App?.STORE?.configDB?.tablesConf[label]?.name) {
+					lbl = App?.STORE?.configDB?.tablesConf[label]?.name
+				}
+				App.STORE.header.tableTabs.push({label:lbl, codename:label});
 			});
 		}
 		App.STORE.header.tableTabs.push({label:App.configTableName, codename:App.configTableName});
@@ -272,7 +310,7 @@ export class App {
 
 	static moveUnusedUploadedImages () {
 		App.STORE.moveUnusedFilesResp = <div style={{display:'inline-block'}} className="inTransition"></div>;
-		AuthStitch.stitchClient.callFunction('moveDBunusedFiles', [''])
+		/* AuthStitch.stitchClient.callFunction('moveDBunusedFiles', [''])
 		.then(resp => {
 			App.STORE.moveUnusedFilesResp = resp.hasOwnProperty('length') ? resp.length + ' files changed' : resp;
 			console.log(resp);
@@ -281,7 +319,7 @@ export class App {
 			App.logError(err);
 			App.STORE.moveUnusedFilesResp = '';
 			App.update();
-		});
+		}); */
 		App.update();
 	}
 }

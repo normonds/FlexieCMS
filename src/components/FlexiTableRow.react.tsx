@@ -31,7 +31,7 @@ export class FlexiTableRowReact extends React.Component<{store:iSTORE, table:iFl
 		return <th key={key}><a className="material-icons"  style={{cursor:'pointer'}}
 								onClick={this.deleteRow.bind(this)}>delete</a></th>
 	}
-	createElement (field : iFlexiTableConfField, props : iCellProps) : JSX.Element {
+	createElement (field : iFlexiTableConfField, props : iCellProps) : React.JSX.Element {
 		let classs : any = FlexiTableCellReact;
 
 		if (!field) field = {};

@@ -1,1 +1,1 @@
-webpack --mode=production --watch
+./node_modules/.bin/webpack  --mode=production --watch

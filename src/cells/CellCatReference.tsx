@@ -11,7 +11,7 @@ import { AppReact } from "../components/App.react";
 import { AppUtils } from "../AppUtils";
 
 export interface iCategoriesReference {
-	items:Array<iFlexiRow>, jsxOptions:Map<string,JSX.Element>, catIDsIDs:Map<string, any>, catIDsTitle:Map<string, string>
+	items:Array<iFlexiRow>, jsxOptions:Map<string,React.JSX.Element>, catIDsIDs:Map<string, any>, catIDsTitle:Map<string, string>
 	, catIDsTitleSpaced: Map<string, string>, catIDsNumerated:Map<string,string>
 }
 export class Categories {
@@ -22,7 +22,7 @@ export class Categories {
 		let catIDsCell:Map<string,iFlexiCell> = new Map();
 		let catIDsTitleSpaced:Map<string,string> = new Map();
 		let catIDsNumerated:Map<string,string> = new Map();
-		let jsxOptions:Map<string,JSX.Element> = new Map();
+		let jsxOptions:Map<string,React.JSX.Element> = new Map();
 		jsxOptions.set('', <option key="TOP" value="">&lt;TOP&gt;</option>);
 		let cellCat, cellTitle;
 		items.forEach((row:iFlexiRow, indxRow:number) => {
@@ -258,7 +258,7 @@ onChangeRadio (val, type :string) { let _:CellCatReference<P> = this;
 		});
 	}
 }
-radioEditingJSX (options :iCategoriesReference, type : 'radio' | 'checkbox') :JSX.Element[] {
+radioEditingJSX (options :iCategoriesReference, type : 'radio' | 'checkbox') :React.JSX.Element[] {
 	//console.log([...options.catIDsTitle.values()]);
 	let ret = [];
 	let checked;
@@ -272,7 +272,7 @@ radioEditingJSX (options :iCategoriesReference, type : 'radio' | 'checkbox') :JS
 	});
 	return ret;
 }
-contentModeEdit () : JSX.Element {
+contentModeEdit () : React.JSX.Element {
 	let refTable = this.props.table.fields.get(this.props.col).refTable;
 	let catRefs :iCategoriesReference = this.props.store.catReferences.get(refTable);
 	let field:iFlexiTableConfField = this.props.table.fields.get(this.props.col);

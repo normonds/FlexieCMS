@@ -1,12 +1,12 @@
-import {
-	Stitch,
-	RemoteMongoClient,
-	AnonymousCredential,
-	GoogleRedirectCredential,
-	StitchAppClient,
-	RemoteMongoDatabase
+// import {
+// 	Stitch,
+// 	RemoteMongoClient,
+// 	AnonymousCredential,
+// 	GoogleRedirectCredential,
+// 	StitchAppClient,
+// 	RemoteMongoDatabase
 
-} from "mongodb-stitch-browser-sdk";
+// } from "mongodb-stitch-browser-sdk";
 
 import { EventApp, EventServer, iAppEvent } from "../Events";
 import { App } from "../App";
@@ -15,10 +15,11 @@ import { file } from "googleapis/build/src/apis/file";
 //import StitchAppClient from './mongodb-stitch-browser-core/dist/esm/core/StitchAppClient.d.ts'
 // export interface sAuthStitch { link?:string, userEmail?:string }
 export class AuthStitch {
-	static stitchClient : StitchAppClient;// = Stitch.defaultAppClient;
-	static refDB : RemoteMongoDatabase;// =
+	static anonLoggedin : boolean
+	static stitchClient : any;// = Stitch.defaultAppClient;
+	static refDB : any;// =
 	static dbDefault;
-	static appURL : string = 'https://flexiecms.ml';
+	static appURL : string = 'https://flexiecms-2019.nooni.dev';
 	static init (appId : string, dbDefault : string) {
 		// Stitch.defaultAppClient
 		// App.logError({});
@@ -28,46 +29,46 @@ export class AuthStitch {
 		//return;
 		console.log('appURL', AuthStitch.appURL);
 		AuthStitch.dbDefault = dbDefault;
-		AuthStitch.stitchClient = Stitch.initializeDefaultAppClient(appId);
-		if (!Stitch.defaultAppClient) {
-			console.warn('Stitch client not initialized!');
-		} else {
-			AuthStitch.refDB = AuthStitch.stitchClient.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
+		AuthStitch.stitchClient = {} //Stitch.initializeDefaultAppClient(appId);
+		// if (!Stitch.defaultAppClient) {
+			// console.warn('Stitch client not initialized!');
+		// } else {
+			AuthStitch.refDB = {} //AuthStitch.stitchClient.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
 				//.refDB('ritmainstituts-shop');
 				// .refDB('flexi-cms-elihz');
-				.db(dbDefault);
+				//.db(dbDefault);
 
 			MongoStitchXHR.init();
-			App.emiter.off(EventApp.REACT_AUTH_LOGIN, AuthStitch.login);
-			App.emiter.off(EventApp.REACT_AUTH_LOGOUT, AuthStitch.logout);
-			App.emiter.off(EventApp.REACT_AUTH_LOGIN_ANONYMOUS, AuthStitch.loginAnon);
+			//App.emiter.off(EventApp.REACT_AUTH_LOGIN, AuthStitch.login);
+			//App.emiter.off(EventApp.REACT_AUTH_LOGOUT, AuthStitch.logout);
+			//App.emiter.off(EventApp.REACT_AUTH_LOGIN_ANONYMOUS, AuthStitch.loginAnon);
 
-			App.emiter.on(EventApp.REACT_AUTH_LOGIN, AuthStitch.login);
+			//App.emiter.on(EventApp.REACT_AUTH_LOGIN, AuthStitch.login);
 			App.emiter.on(EventApp.REACT_AUTH_LOGIN_ANONYMOUS, AuthStitch.loginAnon);
-			App.emiter.on(EventApp.REACT_AUTH_LOGOUT, AuthStitch.logout);
+			//App.emiter.on(EventApp.REACT_AUTH_LOGOUT, AuthStitch.logout);
 			App.emiter.on(EventApp.nm.ImageURLreq, AuthStitch.imgURLReq);
 			//App.emit(new EventApp(EventApp.nm.ImageURLreq, this.props.filename));
 			let hasRedirect = AuthStitch.redirectIfAvailable();
 			if (!hasRedirect) AuthStitch.renderLogin();
-		}
+		// }
 	}
 	static login (e ?: any) {
-		 if (!AuthStitch.stitchClient.auth.isLoggedIn || !Stitch.defaultAppClient.auth.user.profile['data'].email) {
+		 if (!AuthStitch.stitchClient.auth.isLoggedIn /* || !Stitch.defaultAppClient.auth.user.profile['data'].email */) {
 			console.log('not logged in', AuthStitch.stitchClient.auth.hasRedirectResult());
 			let redirURL = window.location.hostname == 'localhost' ? 'http://'+window.location.host
 				: AuthStitch.appURL;
-			const credential = new GoogleRedirectCredential(redirURL);//"http://localhost/flexi/dist/"
-			Stitch.defaultAppClient.auth.loginWithRedirect(credential);
+			//const credential = new GoogleRedirectCredential(redirURL);//"http://localhost/flexi/dist/"
+			//Stitch.defaultAppClient.auth.loginWithRedirect(credential);
 		} else {
 			 AuthStitch.renderLogin();
 			//console.log('logged in', Stitch.defaultAppClient.auth.user.profile['data'].email), Stitch.defaultAppClient.auth.user;
 		}
 	}
 	static renderLogin () {
-		if (AuthStitch.stitchClient.auth.isLoggedIn) {
-			let email = Stitch.defaultAppClient.auth.user.profile['data'].email;
-			console.log('logged in', email, Stitch.defaultAppClient.auth['authInfo']);
-			if (!email) email = 'Anonymous User';
+		if (AuthStitch.anonLoggedin) {
+			//let email = null //Stitch.defaultAppClient.auth.user.profile['data'].email;
+			console.log('logged in anon');
+			let email = 'Anonymous User';
 			App.emit(EventApp.USER_AUTHORIZED, email);
 		} else {
 
@@ -75,7 +76,7 @@ export class AuthStitch {
 		}
 	}
 	static redirectIfAvailable () : boolean {
-		if (AuthStitch.stitchClient.auth.hasRedirectResult()) {
+		/* if (AuthStitch.stitchClient.auth.hasRedirectResult()) {
 			console.log("hasRedirectResult");
 			AuthStitch.stitchClient.auth.handleRedirectResult().then(user => {
 				console.log("handleRedirectResult", user);
@@ -87,15 +88,28 @@ export class AuthStitch {
 				//Stitch.defaultAppClient.auth.loginWithRedirect();
 			});
 			return true;
-		} else return false;
+		} else return false; */
+		return true
 	}
 	static loginAnon () {
-		AuthStitch.stitchClient.auth.loginWithCredential(new AnonymousCredential()).then((user)=>{
+		console.log('loginAnon')
+		// AuthStitch.stitchClient.auth.loginWithCredential(/* new AnonymousCredential() */).then((user)=>{
+			AuthStitch.anonLoggedin = true
 			console.log('Anon logged in');
 			AuthStitch.renderLogin();
-		}).catch((err)=>{
-			App.logError(err);
-		});
+			App.update()
+			//App.emit();
+			/* App.emit(new EventServer(
+				EventApp.nm.TablesList, {
+					dbObj:{res:["one","two","three"]}}
+					, {data:{}
+					, eventName:''
+				}, Date.now())
+			) */
+			//EventApp.nm.TablesList
+		// }).catch((err)=>{
+			// App.logError(err);
+		// });
 	}
 	static logout (e) {
 		console.log(AuthStitch.stitchClient);

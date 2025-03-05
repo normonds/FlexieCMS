@@ -16,7 +16,7 @@ export class AppUtils {
 	static isArray (obj : any) {
 		return (obj && typeof obj === 'object' && obj.constructor === Array);
 	}
-	static wrapValueWithType (valToEval, toWrap:any, rawValue = '') : JSX.Element {
+	static wrapValueWithType (valToEval, toWrap:any, rawValue = '') : React.JSX.Element {
 		// val = JSON.stringify(val);
 		// console.warn(toWrap);
 		let valType = AppUtils.cellType(rawValue);
@@ -122,7 +122,7 @@ export class AppUtils {
 		if (get == undefined || get == null) return null;
 		return JSON.parse(localStorage.getItem(key));
 	}
-	static objToJSX (obj, maxDepth:number = 3, depth:number=0) : JSX.Element[] {
+	static objToJSX (obj, maxDepth:number = 3, depth:number=0) : React.JSX.Element[] {
 		if (!obj) return obj;
 		let step=[], ret = [], i=0;
 		let childIsArray, childIsObject, childIsUndef, childIsNull;

@@ -80,7 +80,7 @@ uploadToUrl (eve : EventServer) { let _:CellUpload = this;
 	//console.warn(eve.eventRequest.data['targetInstance'], eve.data.dbObj, eve.data.dbObj.url, eve.data.dbObj.filename);
 }
 
-// imgIcon (img : JSX.Element, key : number) : JSX.Element {
+// imgIcon (img : React.JSX.Element, key : number) : React.JSX.Element {
 // 	return
 // }
 onDeleteIcon (filename:number) {
@@ -107,9 +107,9 @@ uploadForm () {
 	//return <React.Fragment></React.Fragment>;
 	return <CellUploadIcon isUploading={false} key={'upload'} type='upload' store={this.props.store} filename={''} parent={this} />;
 }
-contentModeView () : JSX.Element {
+contentModeView () : React.JSX.Element {
 	// return <React.Fragment>herrrrrrrrrooo</React.Fragment>;
-	let files:Array<JSX.Element >= [];
+	let files:Array<React.JSX.Element >= [];
 	let incValue:any = this.cell().value;
 	let isUploading = false;
 	if (!incValue) {

@@ -1,5 +1,6 @@
 import { eServerItemModifyState } from "./Events";
 import { iCategoriesReference } from "./cells/CellCatReference";
+import * as React from "react";
 
 export class eCookie {
 	static APP_LIST : string = '__flexi_app_list';
@@ -38,21 +39,21 @@ export interface iFlexiTableConfField {
 	settings ?: {} | string;
 }
 export interface iFlexiTableConfs {
-	description : string;
-	rowCount : number;
-	showFullTexts : boolean;
-	maxFieldChars : number;
-	flexiAppMetaTable : string,
-	onInsertNewAddAuthEmailToField : string;
-	categoriesParentTitleField : string;
-	name : string,
-	subtable : string;
-	tableType : string,
-	rowsPerPage : number,
-	fullTextsMinLength ?: number,
-	cellDirection : string,
-	idCol : string,
-	fields : Array<iFlexiTableConfField>;
+	description ?: string
+	rowCount ?: number
+	showFullTexts ?: boolean
+	maxFieldChars ?: number
+	flexiAppMetaTable ?: string
+	onInsertNewAddAuthEmailToField ?: string
+	categoriesParentTitleField ?: string
+	name ?: string
+	subtable ?: string
+	tableType ?: string
+	rowsPerPage ?: number
+	fullTextsMinLength ?: number
+	cellDirection ?: string
+	idCol ?: string
+	fields ?: Array<iFlexiTableConfField>
 }
 export interface iFlexiTable {
 	//showFullTexts ?: boolean;
@@ -104,7 +105,7 @@ export interface iFlexiDBconf {
 }
 export interface iSTORE {
 	moveUnusedFilesResp ?: any;
-	warnings ?: Map<string,JSX.Element>;
+	warnings ?: Map<string,React.JSX.Element>;
 	adminAllowAnonUsers ?: true;
 	isAdminApp ?: boolean;
 	configDBisEmpty ?: boolean;

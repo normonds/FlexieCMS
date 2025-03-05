@@ -11,7 +11,7 @@ import { EventApp, EventServer } from "../Events";
 import { App } from "../App";
 import { DBType, iSTORE } from "../Interfaces";
 import { FlexiTableReact } from "./FlexiTable.react";
-import { AuthStitch } from "./AuthStitch";
+// import { AuthStitch } from "./AuthStitch";
 import { AppUtils } from "../AppUtils";
 import { FlexiTableStatic } from "../FlexiTableStatic";
 import { AuthGoogle } from "./AuthGoogle";
@@ -41,7 +41,11 @@ export interface sApp {mainTable?:string}
 export interface  iConfServer {tablesConf:string, defaultTable:string, fileUploadDir:string, fileThumbUrl:string, fileUploadUrl:string, tables:string,
 	confTableJsonFields:string}
 
-export class AppReact extends React.Component<{store:iSTORE} ,{}> {
+interface iAppReactProps {
+	store:iSTORE
+}
+
+export class AppReact extends React.Component<iAppReactProps ,{}> {
 
 static FIELD_CAT_PARENT = '__flexi_parent_cat';
 static EMPTY_TABLE : string = "____removeMainTable____";
@@ -95,7 +99,8 @@ static icon () {
 	// return <span className="material-icons">cloud_download</span>
 }
 constructor (props) {
-	super(props); AppReact.verb('App constructor');
+	super(props);
+	AppReact.verb('App constructor');
 	// AppReact.curr = this;
 	// AppReact.emiter = new EventEmitter();
 	this.state = {};

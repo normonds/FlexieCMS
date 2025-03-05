@@ -12,6 +12,7 @@ const ObjectID = BSON.ObjectId;
 import { FlexiMongoXHR } from "./FlexiMongoXHR";
 import { App } from "../App";
 import { AuthStitch } from "./AuthStitch";
+import { DemoData } from "./DemoData";
 const axios = require('axios');
 
 /*window.insertt = function () {
@@ -23,14 +24,17 @@ const axios = require('axios');
 };*/
 //var BSON = new BSON_();
 // console.log(ObjectID("5a14179d01236a9fc1086df6"));
+
+
 export class MongoStitchXHR {
 	static idField : string = '_id';
-	// static uploadUrl : string;
+	// static uploadUrl 
+	// : string;
 	// static url;
 	// static googleAccessToken : string;
 	// static googleIdToken : string;
 	static init () {
-		//console.log('MongoStitchXHR', 'init');
+		console.log('MongoStitchXHR', 'init');
 		App.emiter.on(EventApp.nm.reqCell, MongoStitchXHR.makeRequest);
 		App.emiter.on(EventApp.nm.TablesListRequest, MongoStitchXHR.makeRequest);
 		App.emiter.on(EventApp.nm.TableGetRequest, MongoStitchXHR.makeRequest);
@@ -47,7 +51,7 @@ export class MongoStitchXHR {
 	static makeRequestUploadUrl (eveApp : EventApp) {
 		//console.log('makeRequestUploadUrl', event.data);
 		let startTime = new Date().getTime();
-		// let uploadReqURL = App.STORE.configDB.fileUploadUrl;
+		let uploadReqURL = ''//App.STORE.configDB.fileUploadUrl;
 		// if (!uploadReqURL) { App.logError('Upload url not set '); return; }
 
 		AuthStitch.stitchClient.callFunction('getUploadUrl', [eveApp.data.name, eveApp.data.type]).then(resp => {
@@ -67,7 +71,7 @@ export class MongoStitchXHR {
 			}
 			//App.emit(new EventServer(EventApp.nm.ImageURL, {filename:resp} as iAppEvent));
 		});
-		/*axios.post(uploadReqURL, {name:event.data.name, type:event.data.type}).then(function (response) {
+		axios.post(uploadReqURL, {name:event.data.name, type:event.data.type}).then(function (response) {
 			AppReact.info('response', FlexiMongoXHR.url, response);
 			if (response.data) {
 				response.data.__flexi_servEve = EventServer.nm.UploadURL;
@@ -80,10 +84,11 @@ export class MongoStitchXHR {
 			}
 		}).catch(function (error) {
 			App.warn(error);
-		});*/
+		});
 	}
 	// {tableName:this.confRef.tableName, rowID:this.rowID}
 	static makeRequest (event : EventApp) {
+		
 		let startTime = Date.now();
 		let query: any = {eventName: event.eventName, data: event.data};
 		let forLog = '';
@@ -94,10 +99,10 @@ export class MongoStitchXHR {
 		if (event.data.parentID) forLog += ', parentID:'+event.data.parentID;
 		//+', id:'+event.data.id+', parentID:'+event.data.parentID;
 		AppReact.info('request '+forLog, query);
-		if (!AuthStitch.stitchClient.auth.isLoggedIn) {
-			App.logError('User not logged in. not querying database!');
-			return;
-		}
+		// if (!AuthStitch.stitchClient.auth.isLoggedIn) {
+			// App.logError('User not logged in. not querying database!');
+			// return;
+		// }
 
 		if (event.eventName == EventApp.nm.TableCountRows) {
 
@@ -143,9 +148,9 @@ export class MongoStitchXHR {
 				{upsert: false}).then((res: any) => {
 				//console.log(new Date().getTime() - startTime, res);
 				let retInfo: eServerItemModifyState;
-				/*if (ewa.data.__flexidb_error) {
+				if (ewe.data.__flexidb_error) {
 					App.warn(servEve.data.__flexidb_error);
-				} else */
+				} else 
 				if (res.nModified === 1 || res.modifiedCount === 1 || res.modifiedCount.$numberInt === "1") {
 					retInfo = eServerItemModifyState.MODIFIED;
 				} else if (res.nModified === 0 || res.modifiedCount === 1 || res.modifiedCount.$numberInt === "0") {
@@ -166,16 +171,17 @@ export class MongoStitchXHR {
 			let reqData:iAppEvent = event.data;
 			let query = event.data.query ? event.data.query : {$match:{[MongoStitchXHR.idField]:new ObjectID(reqData.id)}};
 			AuthStitch.refDB.collection(event.data.tableID).aggregate(
-				[query,{$project:{[reqData.col]:1}}/*,{$skip:event.data.skip || 0}, {$limit:event.data.limit || 100}*/])
+				[query,{$project:{[reqData.col]:1}},{$skip:event.data.skip || 0}, {$limit:event.data.limit || 100}])
 				.asArray().then((res: any) => {
 				MongoStitchXHR.processResponse({__flexi_servEve: EventServer.nm.Cell, dbObj: res, __flexidb_duration:-1}, event, startTime);
 			}).catch(e => {	App.logError(e);	});
 		// GET TABLE ROWS
 		} else if (event.eventName == EventApp.nm.TableGetRequest) {
 			let query = event.data.query ? event.data.query : {$match:{}};
-			AuthStitch.refDB.collection(event.data.tableID).aggregate(
+			//AuthStitch.refDB.collection(event.data.tableID).aggregate(
+			DemoData.query(event.data.tableID, 
 				[query,{$sort:{[MongoStitchXHR.idField]:-1}},{$skip:event.data.skip || 0}, {$limit:event.data.limit || 100}])
-				.asArray().then((res: any) => {
+				/* .asArray() */.then((res: any) => {
 					MongoStitchXHR.processResponse({__flexi_servEve: EventServer.nm.Table, dbObj: res, __flexidb_duration:-1}, event, startTime);
 					if (event.data.countRows) MongoStitchXHR.aggregateCount(event, query);
 			}).catch(e => {	App.logError(e);	});
@@ -184,7 +190,8 @@ export class MongoStitchXHR {
 	}
 	static aggregateCount (event:EventApp, query :any) {
 		let startTime = new Date().getTime();
-		AuthStitch.refDB.collection(event.data.tableID).aggregate([query, {$count:'count'}]).asArray().then((res: any) => {
+		//AuthStitch.refDB.collection(event.data.tableID).aggregate
+		DemoData.query(event.data.tableID, [query, {$count:'count'}])/* .asArray() */.then((res: any) => {
 			let rows = 0;
 			if (res[0] && res[0].count) { rows = res[0].count; }
 			MongoStitchXHR.processResponse({__flexi_servEve: EventServer.nm.TableCountRows, dbObj: rows as any, __flexidb_duration:-1}

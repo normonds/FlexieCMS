@@ -1,1 +1,1 @@
-webpack --watch
+./node_modules/.bin/webpack --watch

@@ -6,9 +6,10 @@ import { App } from "../App";
 import { AppUtils } from "../AppUtils";
 import { iFlexiHeaderTab, iSTORE } from "../Interfaces";
 
+
 export class Header extends React.Component<{store:iSTORE}, {}> {
 
-tables : Array<JSX.Element> = [];
+tables : Array<React.JSX.Element> = [];
 
 constructor (props) {
 	super(props);
@@ -56,14 +57,15 @@ render () {
 																					 onClick={this.tabClick.bind(this, tab.codename)} onDoubleClick={this.tabDoubleClick.bind(this, tab.codename)}>{tab.label}</a></li>);
 		}
 	});
-	let devModeLabel = '';
-	let toogleRootLabel = this.props.store.isDevMode ? <React.Fragment>Dev</React.Fragment> : <React.Fragment>&nbsp;&nbsp;&nbsp;</React.Fragment>;
+	let devModeLabel = 'dev mode';
+	let toogleRootLabel = this.props.store.isDevMode ? <React.Fragment>dev mode</React.Fragment> : <React.Fragment>dev mode</React.Fragment>;
 	let deLabel = 'DE';
 	let deLabelOff = <span style={{opacity:0.2}}>DE</span>;
 	let rawLabel = 'Raw';
-	let rawLabelOff = <span style={{opacity:0.2}}>Raw</span>;
+	let rawLabelOff = <span style={{opacity:0.2}}>Raw data</span>;
 	if (!this.props.store.isDevMode) {
-		deLabelOff = rawLabelOff = <React.Fragment>&nbsp;</React.Fragment>;
+		deLabelOff = <React.Fragment>de</React.Fragment>;
+		rawLabelOff = <React.Fragment>Raw data</React.Fragment>;
 	}
 
 	//this.tables.push(<li></li>);
@@ -71,13 +73,13 @@ render () {
 		<AuthReact store={this.props.store}/>
 		<a className="material-icons" onClick={this.toggleSettings.bind(this)} href="#" style={{fontSize:'18px', position:'relative', top:'5px'}}>settings</a>
 		{/*<span style={{width:'100px'}}></span>*/}
-		<a href="#" className="devToggle" onDoubleClick={this.toggleRoot.bind(this)}>{toogleRootLabel}</a>
+		<a href="#" className="devToggle" onClick={this.toggleRoot.bind(this)}>{toogleRootLabel}</a>
 		{/*<span style={{width:'50px'}}></span>*/}
-		<a href="#" className="devToggle" onDoubleClick={this.toogleDirectEditing.bind(this)}>{this.props.store.isDirectEditingEnabled
+		<a href="#" className="devToggle" onClick={this.toogleDirectEditing.bind(this)}>{this.props.store.isDirectEditingEnabled
 			? deLabel : <React.Fragment>{deLabelOff}</React.Fragment>}</a>
-		<a href="#" className="devToggle" onDoubleClick={this.toogleShowRawValues.bind(this)}>{this.props.store.isShowValuesEnabled
+		<a href="#" className="devToggle" onClick={this.toogleShowRawValues.bind(this)}>{this.props.store.isShowValuesEnabled
 			? rawLabel : <React.Fragment>{rawLabelOff}</React.Fragment>}</a>
-		<a href="#" className="devToggle" onDoubleClick={()=>{App.log(App.STORE)}}>{this.props.store.isDevMode
+		<a href="#" className="devToggle" onClick={()=>{App.log(App.STORE)}}>{this.props.store.isDevMode
 			? 'L' : <React.Fragment></React.Fragment>}</a>
 	</div>;
 

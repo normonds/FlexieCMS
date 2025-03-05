@@ -36,7 +36,7 @@ dateOnChange (e) {
 	} else console.warn('Error creating timestamp!', stampToSave);
 	this.setState(outState);
 }
-contentModeEdit () : JSX.Element {
+contentModeEdit () : React.JSX.Element {
 	try {
 		let date = new Date(this.cell().value), timeForInput;
 		let dateForInput = date.getFullYear()+'-';

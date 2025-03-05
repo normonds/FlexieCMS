@@ -11,13 +11,13 @@ constructor (props) {
 	super(props);
 	this.showEditTools = this.enableClickEditing = false;
 }
-contentModeEdit () : JSX.Element {
+contentModeEdit () : React.JSX.Element {
 	return <React.Fragment>{this.props.col}</React.Fragment>;
 }
 gotoApp (path :Array<string>, e) {
 	App.switchApp(path[0], path[1]);
 }
-contentModeView () : JSX.Element {
+contentModeView () : React.JSX.Element {
 	let url = '', app_id = '', app_db = '';
 	this.props.table.rows[this.props.rowIndx].cells.forEach((cell:iFlexiCell, indx:number) => {
 		if (cell.col == 'app_id') {

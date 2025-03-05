@@ -14,6 +14,13 @@ module.exports = {
 	 },
     performance: { hints: false },
     resolve: {
+	fallback: {
+		"crypto": require.resolve("crypto-browserify")
+		, "buffer": require.resolve("buffer/")
+		, "stream": require.resolve("stream-browserify")
+		,  "vm": require.resolve("vm-browserify")
+	},
+
         // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: ["d.ts", ".ts", ".tsx", ".js", ".json"]
     },

@@ -1,9 +1,9 @@
 import { App } from "./App";
 import { CellDirection, DBType, eCookie, eFieldType, iFlexiCell, iFlexiDBconf, iFlexiRow, iFlexiTable, iFlexiTableConfField, iFlexiTableConfs } from "./Interfaces";
 import { eServerItemModifyState, eTableType, EventApp, EventServer, iAppEvent } from "./Events";
-import EventEmitter = require("eventemitter3");
+import { EventEmitter }  from "eventemitter3";
 import { Categories } from "./cells/CellCatReference";
-import { AuthStitch } from "./components/AuthStitch";
+// import { AuthStitch } from "./components/AuthStitch";
 import { AppUtils } from "./AppUtils";
 import { AppReact } from "./components/App.react";
 
@@ -116,8 +116,10 @@ static updateAppListCookie (table : iFlexiTable) {
 	}
 }
 static onServerTableData (eve : EventServer) {
+	
 	let reqData:iAppEvent = eve.eventRequest.data;
 	let table:iFlexiTable = FlexiTableStatic.parse(eve);
+	console.log('onServerTableData', table, reqData, eve)
 
 	FlexiTableStatic.updateAppListCookie(table);
 	//console.log('TABLE parse', reqData.tableType, tableID);
@@ -212,6 +214,7 @@ static onCountRows (eve :EventServer) {
 	App.update();
 }
 static loadTable (tableID :string, tableType :eTableType, forced: boolean = false) {
+	forced = true
 	if (!App.STORE.tables[tableID] || forced) {
 		console.warn('REQ_TABLE ', tableID, tableType/*, FlexiTableStatic.conf(tableID)*/);
 		App.STORE.tables[tableID] = FlexiTableStatic.newTable();
@@ -250,13 +253,14 @@ static reactInsertNew (tableID :string, rowParentID: any) {
 	App.emit(new EventApp(EventApp.nm.RowInsertNewRequest, outData));
 }
 static parse (eve :EventServer) {
+	// console.warn('parse')
 	let reqData:iAppEvent = eve.eventRequest.data;
 	let table:iFlexiTable = FlexiTableStatic.newTable();
 	let row:iFlexiRow;
 	let refConf:iFlexiTableConfs;
 	let subtableHas : boolean = false;
 	let subtableRowsReq: Array<string> = [];
-
+	
 	if (reqData.tableID == App.configTableName) {
 		if (AppUtils.isArray(eve.data.dbObj) && (eve.data.dbObj as Array<any>).length==0) {
 			console.warn('Flexi config table is found but empty');
@@ -271,6 +275,7 @@ static parse (eve :EventServer) {
 			try {
 				App.STORE.configDB.tablesConf = JSON.parse(App.STORE.configDB.tablesConf as any);
 				confUpdating = true;
+				//console.warn(App.STORE.configDB.tablesConf)
 			} catch (e) {
 				console.warn('Error parsing tablesConf', e);
 			}
@@ -284,6 +289,7 @@ static parse (eve :EventServer) {
 
 				if (refConf) {
 					confEmpty.fields = refConf.fields;
+					if (refConf.name) confEmpty.name = refConf.name;
 					if (refConf.description) confEmpty.description = refConf.description;
 					if (refConf.rowsPerPage > -1) confEmpty.rowsPerPage = refConf.rowsPerPage;
 					if (refConf.cellDirection) confEmpty.cellDirection = refConf.cellDirection as CellDirection;
@@ -297,14 +303,14 @@ static parse (eve :EventServer) {
 				App.STORE.configDB.tablesConf[tabl] = confEmpty;
 			}
 
-			console.log('SETTING TABLES CONF', App.STORE.configDB.tablesConf);
 			if (confUpdating) {
+				console.log('SETTING TABLES CONF', App.STORE.configDB.tablesConf);
 				App.emit(EventApp.ON_CONF_SET);
 				App.emit(new EventApp(EventApp.nm.TablesList, App.STORE.configDB.tables.split(',')));
 				//App.update();
+				console.log(JSON.parse(JSON.stringify(App.STORE)))
 			}
 		}
-
 		// console.log(App.configDB);
 	}
 
@@ -422,10 +428,10 @@ static isHorizontal (table : iFlexiTable) : boolean {
 }
 
 static createEmptyConfigRow () {
-	let query:iFlexiDBconf = {tablesConf:'{}' as any, tables:'', defaultTable:'', confTableJsonFields:'', fileThumbUrl:''
-		, fileUploadDir:'', rowsPerPage:50};
-	let req:iAppEvent = {tableID:App.configTableName, query:query};
-	App.emit(new EventApp(EventApp.nm.RowInsertNewRequest, req));
+	// let query:iFlexiDBconf = {tablesConf:'{}' as any, tables:'', defaultTable:'', confTableJsonFields:'', fileThumbUrl:''
+		// , fileUploadDir:'', rowsPerPage:50};
+	// let req:iAppEvent = {tableID:App.configTableName, query:query};
+	// App.emit(new EventApp(EventApp.nm.RowInsertNewRequest, req));
 	//console.log('creating empty config row');
 }
 static createQueryObjectFromSearchTerm (tableID : string, search : string) : object {

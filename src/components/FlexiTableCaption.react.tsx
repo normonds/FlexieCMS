@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FlexiBase, FlexiBaseProps } from "../FlexiBase";
 // import { FlexiTableOld } from "../../to.delete/old/FlexiTableOld";
-import { Editor } from '@tinymce/tinymce-react';
+// import { Editor } from '@tinymce/tinymce-react';
 // import { FlexiTableCell, FlexiTableCellProps } from "../../to.delete/old/FlexiTableCell";
 import { AppReact } from "./App.react";
 import { eTableType, EventApp, EventServer, iAppEvent } from "../Events";
@@ -10,7 +10,7 @@ import { iFlexiTable, iSTORE } from "../Interfaces";
 import { MongoStitchXHR } from "./MongoStitchXHR";
 import { FlexiTableStatic } from "../FlexiTableStatic";
 import { stateFlexiTableCellReact } from "./FlexiTableCell.react";
-const uuidv1 = require('uuid/v1');
+import { v4 as uuidv4 } from 'uuid';
 // export interface FlexiTableCaptionProps  extends FlexiTableCellProps {maxCount?:number, searchTerm?:string	}
 
 export interface sFlexiTableCaption {
@@ -21,8 +21,8 @@ state : sFlexiTableCaption;
 defaultSearchString : string = '<search>';
 defaultAddColString : string = '<add column>';
 defaultGotoPageString : string = 'goto#';
-fullTextLabelOn : JSX.Element = <React.Fragment>&larr; T &rarr;</React.Fragment>;
-fullTextLabelOff : JSX.Element = <React.Fragment>&rarr; T &larr;</React.Fragment>;
+fullTextLabelOn : React.JSX.Element = <React.Fragment>&larr; T &rarr;</React.Fragment>;
+fullTextLabelOff : React.JSX.Element = <React.Fragment>&rarr; T &larr;</React.Fragment>;
 // setState : ({this.state}) => void;
 setState : (state:sFlexiTableCaption, onSetState ?: () => void) => void;
 constructor (props) {
@@ -109,7 +109,7 @@ gotoPageKeyUp (e) {
 		//console.log(e.target.value);
 	}
 }
-genPages () : JSX.Element {
+genPages () : React.JSX.Element {
 	// console.log(this.props.table);
 	let ret = [];
 	let table:iFlexiTable = this.props.table;
@@ -202,7 +202,7 @@ render () {
 	let addMaxItems = this.props.table.conf.rowCount>-1 ? "/"+this.props.table.conf.rowCount : '';
 	let length = this.props.table.rows.length ? this.props.table.rows.length+addMaxItems+' items' : '';
 	return<tr><th className={[...classNames].join(' ')} colSpan={this.props.table.cols.size+1} style={{textAlign:'left'}}>
-		{this.props.table.id}
+		{this.props.table.conf.name || this.props.table.id}
 		&nbsp;&nbsp;{insert}
 		&nbsp;&nbsp;<span style={{fontWeight:'normal', fontSize:'100%'}}>{length}</span>
 
