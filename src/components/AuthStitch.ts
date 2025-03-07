@@ -35,7 +35,7 @@ export class AuthStitch {
 		// } else {
 			AuthStitch.refDB = {} //AuthStitch.stitchClient.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
 				//.refDB('ritmainstituts-shop');
-				// .refDB('flexi-cms-elihz');
+				// .refDB('flexi-cms-app');
 				//.db(dbDefault);
 
 			MongoStitchXHR.init();
@@ -68,7 +68,7 @@ export class AuthStitch {
 		if (AuthStitch.anonLoggedin) {
 			//let email = null //Stitch.defaultAppClient.auth.user.profile['data'].email;
 			console.log('logged in anon');
-			let email = 'Anonymous User';
+			let email = 'AnonymousUser';
 			App.emit(EventApp.USER_AUTHORIZED, email);
 		} else {
 
@@ -139,14 +139,14 @@ export class AuthStitch {
 
 		AuthStitch.pendingImages.add(fileToRequest);
 
-		AuthStitch.stitchClient.callFunction('getAppEngineImage', [fileToRequest]).then(resp => {
-			// console.log('loaded image', fileToRequest, resp);
-			let event = new EventServer(EventServer.nm.ImageURL, resp, eveApp, startTime);
-			event.duration = Date.now()-startTime;
+		//AuthStitch.stitchClient.callFunction('getAppEngineImage', [fileToRequest]).then(resp => {
+			console.log('loaded image', fileToRequest);
+			// let event = new EventServer(EventServer.nm.ImageURL, {dbObj:[{str:1}]}, eveApp, startTime);
+			// event.duration = Date.now()-startTime;
 			AuthStitch.pendingImages.delete(fileToRequest);
-			AuthStitch.loadedImages.set(fileToRequest, resp);
-			App.emit(event);
-			//App.emit(new EventServer(EventApp.nm.ImageURL, {filename:resp} as iAppEvent));
-		}).catch(err => App.logError(err));
+			AuthStitch.loadedImages.set(fileToRequest, fileToRequest);
+			// App.emit(event); 
+			App.emit(EventApp.nm.ImageURL, {filename:fileToRequest} as iAppEvent);
+		//}).catch(err => App.logError(err));
 	}
 }

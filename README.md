@@ -22,7 +22,7 @@ Basic guide for adding stitch app to flexiecms.ml with anonymous access.
 6. Enable Anonymous Authentication.
 7. Add rule for collection __flexi_conf so it can be read and modified
 8. Allow anonymous access for at least one other collection.
-9. Copy stitch app id (it looks smth like this: "flexi-cms-elihz")
+9. Copy stitch app id (it looks smth like this: "flexi-cms-app")
 10. Goto [https://flexiecms.ml](https://flexiecms.ml) and login with google authorization.
 11. Turn on dev mode to see detailed view of data. Double click invisible icon next to settings icon.
 

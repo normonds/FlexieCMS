@@ -1,6 +1,6 @@
 import { App } from "./App";
-import { CellDirection, DBType, eCookie, eFieldType, iFlexiCell, iFlexiDBconf, iFlexiRow, iFlexiTable, iFlexiTableConfField, iFlexiTableConfs } from "./Interfaces";
-import { eServerItemModifyState, eTableType, EventApp, EventServer, iAppEvent } from "./Events";
+import { CellDirection, DBType, eCookie, eFieldType, eServerItemModifyState, eTableType, iFlexiCell, iFlexiDBconf, iFlexiRow, iFlexiTable, iFlexiTableConfField, iFlexiTableConfs } from "./Interfaces";
+import { EventApp, EventServer, iAppEvent } from "./Events";
 import { EventEmitter }  from "eventemitter3";
 import { Categories } from "./cells/CellCatReference";
 // import { AuthStitch } from "./components/AuthStitch";
@@ -77,7 +77,7 @@ static generateCols (items : Array<any>, table : iFlexiTable) : Map<string, stri
 }
 static reqCatReferences (eve : EventApp) {
 	let data : any = eve.data;
-	// console.warn('req cat reference tableID', data, data.col, data.settings);
+	//console.warn('req cat reference tableID', data, data.col, data.settings);
 	let settings:iFlexiTableConfField = data.settings;
 	Categories.refreshCatReferences(settings.refTable, settings.refCol);
 	// App.emit(new EventApp(EventApp.nm.TableGetRequest, {tableID:settings.refTable, col:settings.refCol
@@ -92,7 +92,7 @@ static itemUpdateRequest (eve : EventApp) {
 }
 static conf (tableID : string) : iFlexiTableConfs {
 	if (App.STORE.configDB && App.STORE.configDB.tablesConf[tableID]) {
-		//console.log(App.STORE.configDB.tablesConf);
+		// console.warn('conf', tableID, App.STORE.configDB.tablesConf[tableID].subtable);
 		return App.STORE.configDB.tablesConf[tableID];
 	} else return FlexiTableStatic.newTableConfs();
 }
@@ -125,7 +125,7 @@ static onServerTableData (eve : EventServer) {
 	//console.log('TABLE parse', reqData.tableType, tableID);
 	table.fields.forEach((field: iFlexiTableConfField, indx: any) => {
 		if (field.type == eFieldType.CAT_REFERENCE && field.refTable!=table.id) {
-			console.log('REQ CAT_REFERENCE', field, field.refTable, field.refCol, field.refIdCol);
+			// console.log('REQ CAT_REFERENCE', field, field.refTable, field.refCol, field.refIdCol);
 			let outData:iAppEvent = {
 				tableID: table.id, col: field.refCol
 				, settings: {refTable: field.refTable, refCol: field.refCol, refIdCol: field.refIdCol, fieldSettings:field.settings}
@@ -135,7 +135,7 @@ static onServerTableData (eve : EventServer) {
 	});
 
 	if (reqData.tableType == eTableType.FULL) {
-		// console.warn('setting main tableID', table);
+		//console.warn('setting main tableID', table.name, table.subtableName);
 		if (table.subtableName) {
 			table.subtable = App.STORE.subtables[table.id];
 			// console.warn('SUBTABLE SET', table.subtable);
@@ -215,8 +215,9 @@ static onCountRows (eve :EventServer) {
 }
 static loadTable (tableID :string, tableType :eTableType, forced: boolean = false) {
 	forced = true
+	if (tableID == App.configTableName) forced = false
 	if (!App.STORE.tables[tableID] || forced) {
-		console.warn('REQ_TABLE ', tableID, tableType/*, FlexiTableStatic.conf(tableID)*/);
+		//console.warn('REQ_TABLE ', tableID, tableType/*, FlexiTableStatic.conf(tableID)*/);
 		App.STORE.tables[tableID] = FlexiTableStatic.newTable();
 		App.STORE.tables[tableID].inTransition = true;
 		let reqData:iAppEvent = {countRows:true, tableType:tableType, tableID:tableID, limit:FlexiTableStatic.conf(tableID).rowsPerPage};
@@ -289,6 +290,7 @@ static parse (eve :EventServer) {
 
 				if (refConf) {
 					confEmpty.fields = refConf.fields;
+					if (refConf.subtable) confEmpty.subtable = refConf.subtable;
 					if (refConf.name) confEmpty.name = refConf.name;
 					if (refConf.description) confEmpty.description = refConf.description;
 					if (refConf.rowsPerPage > -1) confEmpty.rowsPerPage = refConf.rowsPerPage;
@@ -333,30 +335,32 @@ static parse (eve :EventServer) {
 		table.cols = FlexiTableStatic.generateCols(eve.data.dbObj, table);
 		table.fields = FlexiTableStatic.parseFields(table);
 		//tableID.labels = App.generateLabels(tableID.id);
-
+		//if (table.id == 'fullTable') console.error(eve.data.dbObj)
 		eve.data.dbObj.forEach((dbRow:any, rowIndx:number) => {
 			row = {cells:[], rowID:null};
 			for (let dbCellKey in dbRow) {
-
 				//Object.values(row).forEach((cell:any, cellIndx:number) => {
 				if (dbCellKey==table.conf.idCol) {
 					row.rowID = dbRow[dbCellKey].toString();
 				} else if (dbCellKey == App.FIELD_PARENT) {
+					//console.error(row, dbRow[dbCellKey].toString())
 					row.rowParentID = dbRow[dbCellKey].toString();
 				}
 				row.cells.push({value:dbRow[dbCellKey], col:dbCellKey});
 			}
-			if (refConf && refConf.subtable && row.rowID) {
+			//if (table.id == 'fullTable') console.error(table)
+			if (table && table.conf && table?.conf?.subtable && row?.rowID) {
 				subtableHas = true;
 				subtableRowsReq.push(row.rowID);
+				
 				//tableID.subtable = FlexiTableStatic.parse(refConf.subtable);
 			}
 			table.rows.push(row);
 		});
 		if (subtableHas) {
-			table.subtableName = refConf.subtable;
+			table.subtableName = table.conf.subtable;
 			// console.warn(table.id + ' has subtable ' + table.subtableName);
-			FlexiTableStatic.loadTable(refConf.subtable, eTableType.FULL);
+			FlexiTableStatic.loadTable(table.conf.subtable, eTableType.FULL);
 			/*if (!App.STORE.subtables[refConf.subtable]) App.STORE.subtables[refConf.subtable] = FlexiTableStatic.newTable();
 			table.subtableName = refConf.subtable;
 			let eveData: iAppEvent = {

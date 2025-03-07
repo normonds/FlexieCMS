@@ -1,6 +1,6 @@
 import * as React from "react";
 import { App } from "../App";
-import { iFlexiRow, iFlexiTable, iSTORE } from "../Interfaces";
+import { eTableType, iFlexiRow, iFlexiTable, iSTORE } from "../Interfaces";
 // import { FlexiTableRow } from "../../to.delete/old/FlexiTableRow";
 import { FlexiTableRowReact } from "./FlexiTableRow.react";
 import { FlexiTableCaptionReact } from "./FlexiTableCaption.react";
@@ -46,8 +46,18 @@ export class FlexiTableReact extends React.Component<{store:iSTORE, table:iFlexi
 		if (this.props.table) {
 			description =  FlexiTableStatic.conf(this.props.table.id).description ? FlexiTableStatic.conf(this.props.table.id).description : '';
 		}
-		//console.log('out', out);
-		return <div className="tableWrap" ><div style={{margin:'12px 0 6px 6px'}} dangerouslySetInnerHTML={{__html:description}} /><table className="table-style-0"><tbody>
+		let tableWrap = "tableWrap"
+		let margins =  '12px 0 6px 6px'
+		let tableStyle = 'table-style-0'
+		if (this.props.table?.conf?.tableType == eTableType.SUBTABLE) {
+			tableWrap = ""
+			margins =  ''
+			tableStyle = 'table-style-1'
+		}
+		// if (this.props.table.conf.fields.has(App.FIELD_PARENT)) {
+			// tableWrap = ''; margins = '0'
+		// }
+		return <div className={tableWrap}><div style={{margin:margins}} dangerouslySetInnerHTML={{__html:description}} /><table className={tableStyle}><tbody>
 			<FlexiTableCaptionReact store={this.props.store} table={table} rowParentID={this.props.rowParentID} />
 			{tbody}</tbody></table>
 		</div>;

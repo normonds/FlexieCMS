@@ -15,7 +15,7 @@ render () {
 	let notLoggedIn = <React.Fragment>
 		{/* <button onClick={this.login.bind(this)}>Login with Google account</button> */} {anonLogin}
 	</React.Fragment>;
-	let loggedIn = <React.Fragment><span className="auth-email">{this.props.store.authorizedName}</span>&nbsp;&nbsp;
+	let loggedIn = <React.Fragment><span className="auth-email" style={{opacity:0.5, fontSize:'90%', fontStyle:'italic'}}>&nbsp;{this.props.store.authorizedName}</span>&nbsp;&nbsp;
 		<button onClick={this.logout.bind(this)}>Log out</button></React.Fragment>
 	let link = this.props.store.authorizedName ? loggedIn : notLoggedIn;
 	return <span>{link}</span>;

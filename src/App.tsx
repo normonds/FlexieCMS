@@ -1,7 +1,7 @@
 import { AppReact } from "./components/App.react";
 
 import { EventEmitter} from "eventemitter3";
-import { eTableType, eServerItemModifyState, EventApp, EventServer, iAppEvent } from "./Events";
+import { EventApp, EventServer, iAppEvent } from "./Events";
 import * as ReactDOM from "react-dom";
 import * as React from "react";
 
@@ -10,7 +10,7 @@ import { MongoStitchXHR } from "./components/MongoStitchXHR";
 import { AppUtils } from "./AppUtils";
 import { Categories, CellCatReference, iCategoriesReference } from "./cells/CellCatReference";
 import { FlexiTableStatic } from "./FlexiTableStatic";
-import { CellDirection, DBType, eCookie, iFlexiCell, iFlexiTable, iFlexiTableConfField, iFlexiTableConfs, iSTORE, WarningLevel } from "./Interfaces";
+import { CellDirection, DBType, eCookie, eTableType, iFlexiCell, iFlexiTable, iFlexiTableConfField, iFlexiTableConfs, iSTORE, WarningLevel } from "./Interfaces";
 const BSON = require('bson');
 const ObjectID = BSON.ObjectId;
 
@@ -107,18 +107,18 @@ export class App {
 		App.emiter.on(EventApp.nm.TableGetRequest, App.tableGetRequest);
 		App.emiter.on(EventServer.nm.Cell, App.renderCell);
 
-		App.STORE = {warnings:new Map(), adminAllowAnonUsers:true, isAdminApp:false, adminApp:{id:'flexi-cms-elihz', db:'flexi-cms-confs'}
+		App.STORE = {warnings:new Map(), adminAllowAnonUsers:true, isAdminApp:false, adminApp:{id:'flexi-cms-app', db:'flexi-cms-confs'}
 		, isDevMode:false, showSettings:false, isDirectEditingEnabled:false, pageTitle:'FlexieCMS', header:{tableTabs:[]}
 			, tables:{}, catReferences:new Map(), subtables:{}};
 
 		FlexiTableStatic.subscribeToEvents(App.emiter);
 		/*App.STORE.appList = [
 			{id:'ritmainstituts-shop-rafyj', db:'ritmainstituts-shop'}
-			,{id:'ri-stitch-piwyk', db:'noonidb'}
-			, {id:'flexi-cms-elihz', db:'flexi-cms-conf'}
+			,{id:'ri-stitch-piwyk', db:'db'}
+			, {id:'flexi-cms-app', db:'flexi-cms-conf'}
 		];*/
 
-		AuthStitch.init('ri-stitch-piwyk', 'noonidb');
+		AuthStitch.init('flexi-cms-app', 'db');
 		//AuthStitch.renderLogin();
 	}
 	init () {
@@ -129,7 +129,8 @@ export class App {
 		// @ts-ignor
 		//App.rootNode = ReactDOM.render(document.getElementById("root"))
 		App.readAndSetUrlVarsIfExists()
-
+		App.STORE.appID = 'flexi-cms-app'
+		App.STORE.appDB = 'db'
 		if (App.STORE.appID && App.STORE.appDB) {
 			AppUtils.storageSave(eCookie.APP_ACTIVE, [App.STORE.appID, App.STORE.appDB]);
 		}
@@ -178,7 +179,10 @@ export class App {
 		}  */
 		//App.STORE.authorizedEmail = 'user@domain.com'
 		// App.STORE.authorizedName = 'user'
-
+		AuthStitch.anonLoggedin = true
+		AuthStitch.renderLogin()
+			// if (AuthStitch.anonLoggedin) {
+		// App.userAuthorized()
 		App.update()
 		//App.emit(new EventApp(EventApp.nm.TablesList, App.STORE.configDB.tables.split(',')));
 		/*App.emiter.on(EventApp.nm.TableGetRequest, ()=>{
@@ -191,7 +195,7 @@ export class App {
 				
 			))
 		}) */
-
+		console.log('App.init()')
 	}
 
 	static windowPopState (eve) {

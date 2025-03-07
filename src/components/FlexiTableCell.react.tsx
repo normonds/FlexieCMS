@@ -1,10 +1,10 @@
 import * as React from "react";
 import { App } from "../App";
-import { eFieldType, iFlexiCell, iFlexiTableConfField } from "../Interfaces";
+import { eFieldType, eServerItemModifyState, iFlexiCell, iFlexiTableConfField } from "../Interfaces";
 // import { FlexiTableRow } from "../../to.delete/old/FlexiTableRow";
 import { AppReact } from "./App.react";
 import { AppUtils, eCellValType } from "../AppUtils";
-import { eServerItemModifyState, EventApp, iAppEvent } from "../Events";
+import { EventApp, iAppEvent } from "../Events";
 //import { Editor } from '@tinymce/tinymce-react';
 import { SyntheticEvent } from "react";
 import { iCellProps } from "./FlexiTableRow.react";
@@ -410,7 +410,7 @@ render () { let _:FlexiTableCellReact<P> = this;
 			out = AppUtils.wrapValueWithType(AppUtils.cellVal(cell.value), out, cell.value);
 		}
 	}
-
+	//out = <span>---{out}</span>
 	// React.createElement(type:'td')
 	let props = {className:[... this.classNames].join(' '),  onClick:_.onClick.bind(_)};
 	let cellElement = React.createElement('td', props, out);

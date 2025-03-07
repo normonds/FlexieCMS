@@ -54,7 +54,7 @@ const {
 
 
 const client = stitch.Stitch.initializeDefaultAppClient('ri-stitch-piwyk');
-const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('noonidb');
+const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('db');
 if (client.auth.hasRedirectResult()) {
     client.auth.handleRedirectResult().then(user => {
         console.log("handleRedirectResult", user);

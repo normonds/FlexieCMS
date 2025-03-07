@@ -170,7 +170,8 @@ export class CellUploadIcon extends React.Component
 	onImageURL (eve : EventServer) {
 		//console.log(eve);
 		if (this.props.filename == eve.eventRequest.data.filename) {
-			this.setState({imageURL:eve.data+'=s100'});
+			this.setState({imageURL:eve.data+''});
+			// this.setState({imageURL:eve.data+'=s100'});
 		}
 	}
 	onMouseDown () {
@@ -279,12 +280,12 @@ export class CellUploadIcon extends React.Component
 				<span className="material-icons">cloud_upload</span>{this.state.progress + '%'}</React.Fragment>;
 		} else {
 
-			let imgTag = !this.state.imageURL ? '' : <img style={{maxWidth:'150px'}}
+			let imgTag = !this.state.imageURL ? '' : <img style={{maxWidth:'103px'}}
 				onLoad={this.imageLoaded.bind(this)}
 				onError={this.imageErrored.bind(this)}
 				src={this.state.imageURL} />;
 
-			imgContent = <a href={App.STORE.configDB.fileUploadDir+this.props.filename} target="_blank"
+			imgContent = <a href={/* App.STORE.configDB.fileUploadDir+ */this.props.filename} target="_blank"
 							title="Open full image">{imgTag}</a>
 		}
 

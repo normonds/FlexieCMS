@@ -1,8 +1,9 @@
 // import { iServerResponseWrap, iUpdateItemRequest } from "../Interfaces";
 // import { FlexiTableOld } from "../../to.delete/old/FlexiTableOld";
 import { AppReact } from "./App.react";
-import { EventApp, iAppEvent, iServerEvent, EventServer } from "../Events";
+import { EventApp, iAppEvent, EventServer } from "../Events";
 import { App } from "../App";
+import { iServerEvent } from "src/Interfaces";
 // const prettyPrint = require('json-pretty-html').default;
 // import * as AWS from 'aws-sdk';a
 const axios = require('axios');
@@ -10,7 +11,7 @@ const axios = require('axios');
 export class FlexiMongoXHR {
 
 static url;
-static db : string = 'noonidb';
+static db : string = 'db';
 static googleAccessToken : string;
 static googleIdToken : string;
 static init () {

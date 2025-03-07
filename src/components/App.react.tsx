@@ -86,7 +86,7 @@ static verb (... args) {	if (AppReact.debug.verbose) console.log(... args);}
 static info (... args) {
 
 	let color = 'lime';
-	if (typeof args[0] == 'string' && args[0].startsWith('request')) color = 'yellow';
+	if (typeof args[0] == 'string' && args[0].startsWith('request')) color = 'orange';
 	else if (typeof args[0] == 'string' && args[0].startsWith('response')) color = 'lime';
 
 	if (args.length==2) {

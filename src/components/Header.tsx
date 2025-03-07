@@ -1,6 +1,6 @@
 import * as React from "react";
 import { AppReact } from "./App.react";
-import { EventApp, iServerEvent, EventServer, eTableType, iAppEvent } from "../Events";
+import { EventApp, EventServer, iAppEvent } from "../Events";
 import { AuthReact } from "./Auth.react";
 import { App } from "../App";
 import { AppUtils } from "../AppUtils";
@@ -58,29 +58,29 @@ render () {
 		}
 	});
 	let devModeLabel = 'dev mode';
-	let toogleRootLabel = this.props.store.isDevMode ? <React.Fragment>dev mode</React.Fragment> : <React.Fragment>dev mode</React.Fragment>;
+	let toogleRootLabel = this.props.store.isDevMode ? <span>dev mode</span> : <span style={{opacity:0.2}}>dev mode</span>;
 	let deLabel = 'DE';
 	let deLabelOff = <span style={{opacity:0.2}}>DE</span>;
-	let rawLabel = 'Raw';
-	let rawLabelOff = <span style={{opacity:0.2}}>Raw data</span>;
+	let rawLabel = <span style={{fontSize:'90%'}}>raw data</span>;
+	let rawLabelOff = <span style={{fontSize:'90%', opacity:0.2}}>raw data</span>;
 	if (!this.props.store.isDevMode) {
-		deLabelOff = <React.Fragment>de</React.Fragment>;
-		rawLabelOff = <React.Fragment>Raw data</React.Fragment>;
+		deLabelOff = <React.Fragment>de</React.Fragment>
+		rawLabelOff = <span style={{fontSize:'90%', opacity:0.2}}>raw data</span>
 	}
 
 	//this.tables.push(<li></li>);
 	return <div id="header"><ul className='tableList'>{this.tables}</ul>
 		<AuthReact store={this.props.store}/>
-		<a className="material-icons" onClick={this.toggleSettings.bind(this)} href="#" style={{fontSize:'18px', position:'relative', top:'5px'}}>settings</a>
+		{/* <a className="material-icons" onClick={this.toggleSettings.bind(this)} href="#" style={{fontSize:'18px', position:'relative', top:'5px'}}>settings</a> */}
 		{/*<span style={{width:'100px'}}></span>*/}
 		<a href="#" className="devToggle" onClick={this.toggleRoot.bind(this)}>{toogleRootLabel}</a>
 		{/*<span style={{width:'50px'}}></span>*/}
-		<a href="#" className="devToggle" onClick={this.toogleDirectEditing.bind(this)}>{this.props.store.isDirectEditingEnabled
-			? deLabel : <React.Fragment>{deLabelOff}</React.Fragment>}</a>
+		{/* <a href="#" className="devToggle" onClick={this.toogleDirectEditing.bind(this)}>{this.props.store.isDirectEditingEnabled
+			? deLabel : <React.Fragment>{deLabelOff}</React.Fragment>}</a> */}
 		<a href="#" className="devToggle" onClick={this.toogleShowRawValues.bind(this)}>{this.props.store.isShowValuesEnabled
 			? rawLabel : <React.Fragment>{rawLabelOff}</React.Fragment>}</a>
-		<a href="#" className="devToggle" onClick={()=>{App.log(App.STORE)}}>{this.props.store.isDevMode
-			? 'L' : <React.Fragment></React.Fragment>}</a>
+		{/* <a href="#" className="devToggle" onClick={()=>{App.log(App.STORE)}}>{this.props.store.isDevMode
+			? 'L' : <React.Fragment></React.Fragment>}</a> */}
 	</div>;
 
 }

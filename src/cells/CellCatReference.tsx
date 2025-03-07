@@ -2,11 +2,11 @@
 import { FlexiTableCellReact, stateFlexiTableCellReact } from "../components/FlexiTableCell.react";
 import * as React from "react";
 import { App } from "../App";
-import { iFlexiCell, iFlexiRow, iFlexiTableConfField } from "../Interfaces";
+import { eTableType, iFlexiCell, iFlexiRow, iFlexiTableConfField } from "../Interfaces";
 import { iCellProps } from "../components/FlexiTableRow.react";
 // import { FlexiTableOld } from "../../to.delete/old/FlexiTableOld";
 // import { iFlexiTableLayout } from "../Interfaces";
-import { eTableType, EventApp, EventServer, iAppEvent } from "../Events";
+import { EventApp, EventServer, iAppEvent } from "../Events";
 import { AppReact } from "../components/App.react";
 import { AppUtils } from "../AppUtils";
 
@@ -28,8 +28,9 @@ export class Categories {
 		items.forEach((row:iFlexiRow, indxRow:number) => {
 			// console.log(row.cells);
 			cellCat = '';
-			cellTitle = '';
+			
 			row.cells.forEach((cell:iFlexiCell, indxCell:number) => {
+				//console.log('processCatRefs', colTitle, cell.col)
 				if (cell.col == App.FIELD_CAT_PARENT) {
 					cellCat = cell.value;
 					catIDsCell.set(row.rowID, cell);
@@ -40,6 +41,7 @@ export class Categories {
 				}
 			});
 			catIDsIDs.set(row.rowID, cellCat);
+			//console.log(row.rowID, cellTitle)
 			catIDsTitle.set(row.rowID, cellTitle);
 
 		});
@@ -93,9 +95,9 @@ export class Categories {
 
 		let ret:iCategoriesReference = {catIDsTitleSpaced:catIDsTitleSpaced, items:items, jsxOptions:jsxOptions
 			, catIDsIDs:catIDsIDs, catIDsTitle:catIDsTitle, catIDsNumerated:catIDsNumerated};
-		// console.log('processCatRefs', ret);
+		//console.log('processCatRefs', ret);
 		//return ret;
-		console.warn('processCatRefs', tableID, colTitle, settings, ret);
+		// console.warn('processCatRefs', tableID, colTitle, settings, ret);
 		App.STORE.catReferences.set(tableID, ret);
 	}
 	static rearrangeRows (rows : Array<iFlexiRow>, mapIDsNumerated : Map<string,string>) {

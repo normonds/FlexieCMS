@@ -1,48 +1,8 @@
 // import { FlexiTableOld } from "../../to.delete/old/FlexiTableOld";
+//import { * } from "./Interfaces"
 
-export enum eTableType {
-	CAT_REFERENCE = 'catReference',
-	FULL = 'full',
-	SUBTABLE = 'subtable',
-	CATEGORIES = 'categories',
-	STANDARD = 'standard'
-}
-export enum eServerItemModifyState {
-	MODIFIED  = 'modified',
-	MODIFIED_NOT = 'not modified',
-	MODIFY_ERROR = 'modify error'
-}
-export interface iServerEventDBobj {
-	db? : string,
-	idCol? : string,
-	idColSecondary? : string
-	insertedId? : string | number;
-	insertedCount? : number;
-	nModified? : number;
-	deletedCount? : number;
-	id? : string | number;
-	url? : string;
-	filename? : string;
-	modifiedCount? : any;
-	modifiedState? : eServerItemModifyState;
-	res? : any;
-}
-export interface iServerEvent {
-	dbObj : iServerEventDBobj ;
-	authorized? : boolean,
-	__flexidb_duration? : number;
-	__flexi_servEve? : string;
-	__flexidb_error? : Object;
-	__flexidb_info? : Object;
-}
-/*export class EventAppError {
-	data : any;
-	eventName : string;
-	constructor (eventName : string, data:any) {
-		this.eventName = eventName;
-		this.data = data;
-	}
-}*/
+import { iServerEvent, eTableType } from "./Interfaces";
+
 export class EventServer {
 	
 	static nm = {
