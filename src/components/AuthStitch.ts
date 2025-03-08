@@ -8,10 +8,11 @@
 
 // } from "mongodb-stitch-browser-sdk";
 
-import { EventApp, EventServer, iAppEvent } from "../Events";
-import { App } from "../App";
-import { MongoStitchXHR } from "./MongoStitchXHR";
-import { file } from "googleapis/build/src/apis/file";
+import { EventApp, EventServer, iAppEvent } from "../Events"
+import { App } from "../App"
+import { MongoStitchXHR } from "./MongoStitchXHR"
+import { file } from "googleapis/build/src/apis/file"
+import { AppUtils } from "../AppUtils"
 //import StitchAppClient from './mongodb-stitch-browser-core/dist/esm/core/StitchAppClient.d.ts'
 // export interface sAuthStitch { link?:string, userEmail?:string }
 export class AuthStitch {
@@ -34,17 +35,16 @@ export class AuthStitch {
 			// console.warn('Stitch client not initialized!');
 		// } else {
 			AuthStitch.refDB = {} //AuthStitch.stitchClient.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
-				//.refDB('ritmainstituts-shop');
 				// .refDB('flexi-cms-app');
 				//.db(dbDefault);
 
 			MongoStitchXHR.init();
 			//App.emiter.off(EventApp.REACT_AUTH_LOGIN, AuthStitch.login);
-			//App.emiter.off(EventApp.REACT_AUTH_LOGOUT, AuthStitch.logout);
+			App.emiter.on(EventApp.REACT_AUTH_LOGOUT, AuthStitch.anonLogout);
 			//App.emiter.off(EventApp.REACT_AUTH_LOGIN_ANONYMOUS, AuthStitch.loginAnon);
 
 			//App.emiter.on(EventApp.REACT_AUTH_LOGIN, AuthStitch.login);
-			App.emiter.on(EventApp.REACT_AUTH_LOGIN_ANONYMOUS, AuthStitch.loginAnon);
+			App.emiter.on(EventApp.REACT_AUTH_LOGIN_ANONYMOUS, AuthStitch.anonLogin);
 			//App.emiter.on(EventApp.REACT_AUTH_LOGOUT, AuthStitch.logout);
 			App.emiter.on(EventApp.nm.ImageURLreq, AuthStitch.imgURLReq);
 			//App.emit(new EventApp(EventApp.nm.ImageURLreq, this.props.filename));
@@ -71,7 +71,6 @@ export class AuthStitch {
 			let email = 'AnonymousUser';
 			App.emit(EventApp.USER_AUTHORIZED, email);
 		} else {
-
 			console.log('not logged in');
 		}
 	}
@@ -91,11 +90,12 @@ export class AuthStitch {
 		} else return false; */
 		return true
 	}
-	static loginAnon () {
+	static anonLogin () {
 		console.log('loginAnon')
 		// AuthStitch.stitchClient.auth.loginWithCredential(/* new AnonymousCredential() */).then((user)=>{
 			AuthStitch.anonLoggedin = true
-			console.log('Anon logged in');
+			AppUtils.storageSave('flexiecms2019-anonLogin', true)
+			//console.log('Anon logged in');
 			AuthStitch.renderLogin();
 			App.update()
 			//App.emit();
@@ -111,9 +111,15 @@ export class AuthStitch {
 			// App.logError(err);
 		// });
 	}
-	static logout (e) {
-		console.log(AuthStitch.stitchClient);
-		AuthStitch.stitchClient.auth.logout();
+	static anonLogout (e) {
+		console.log('anonLogout');
+		AppUtils.storageSave('flexiecms2019-anonLogin', false)
+		App.emit(EventApp.USER_DEAUTHORIZED);
+		AuthStitch.anonLoggedin = false
+		AuthStitch.renderLogin();
+		App.update()
+		
+		//AuthStitch.stitchClient.auth.logout();
 		setTimeout(()=>location.reload(), 500);
 	}
 	// static componentDidMount () {
@@ -140,7 +146,7 @@ export class AuthStitch {
 		AuthStitch.pendingImages.add(fileToRequest);
 
 		//AuthStitch.stitchClient.callFunction('getAppEngineImage', [fileToRequest]).then(resp => {
-			console.log('loaded image', fileToRequest);
+			//console.log('loaded image', fileToRequest);
 			// let event = new EventServer(EventServer.nm.ImageURL, {dbObj:[{str:1}]}, eveApp, startTime);
 			// event.duration = Date.now()-startTime;
 			AuthStitch.pendingImages.delete(fileToRequest);

@@ -1,6 +1,7 @@
 import { describe } from "node:test"
 import { App } from "../App"
 import { eFieldType, eTableType } from "../Interfaces"
+import { AppUtils } from "../AppUtils";
 
 export class DemoData {
 	static db = {
@@ -35,81 +36,104 @@ export class DemoData {
 			{_id:"67c9f09691a5c340f0014bba", __flexi_parent:'507f191e810c19729de860ea', title:'Title 11', descr:'11'}
 			, {_id:"67c9f0a16765ef96c9ffa5b6",  __flexi_parent:'507f1f77bcf86cd799439011', title:'Title 22', descr:'22'}
 			, {_id:"67c9f0a846c218febaf1d511",  __flexi_parent:'507f191e810c19729de860ea', title:'Title33', descr:'33'}
-		]
-	}
-	static confCell = {
-		tablesConf:JSON.stringify({
-			fullTable:{
-				description:'Category is referenced from CATEGORIES tab',
-				name: 'Products',
-				idCol:'_id',
-				tableType: eTableType.FULL,
-				cellDirection : 'vertical',
-				fields:[
-					{name:'category', label:'Category', type:'catReference', refTable:'categories', refCol:'title', refIdCol:'_id'},
-					{name:'radios', label:'Radios', type:'catReference', refTable:'subTable', refCol:'title', refIdCol:'_id', settings:'radio'},
-					{name:'title', label:'Title', type:'string'},
-					{name:'descr', label:'Description', type:'string'},
-					{name:'images', label:'Images', type:'fileUpload'},
-				],
-				subtable: 'subTable2'
-				/* subtable: {
+		],
+		__flexi_conf : [{
+			tablesConf:JSON.stringify({
+				fullTable:{
+					description:'Category is referenced from CATEGORIES tabs',
+					name: 'Products',
+					idCol:'_id',
+					tableType: eTableType.FULL,
+					cellDirection : 'vertical',
+					fields:[
+						{name:'category', label:'Category (complex nested select field using entries from another table)', type:'catReference', refTable:'categories', refCol:'title', refIdCol:'_id'},
+						{name:'radios', label:'single select field using entries from another table', type:'catReference', refTable:'subTable', refCol:'title', refIdCol:'_id', settings:'radio'},
+						{name:'title', label:'Title (simple field)', type:'string'},
+						{name:'descr', label:'Description (simple field)', type:'string'},
+						{name:'images', label:'Images (file upload field)', type:'fileUpload'},
+					],
+					subtable: 'subTable2'
+					/* subtable: {
+						description:'',
+						name: 'Subtable2',
+						idCol:'_id',
+						tableType: eTableType.SUBTABLE,
+						fields:[
+							{name:'title', label:'Title', type:'string'},
+							{name:'descr', label:'Description', type:'string'},
+						]
+					} */
+				}, categories:{
+					description:'Nested categories',
+					name: 'Categories',
+					idCol:'_id',
+					tableType: 'categories',
+					categoriesParentTitleField: 'title',
+					fields:[
+						{name:'__flexi_parent_cat', label:'Category reference', type:'catReference', refTable:'categories', refCol:'title', refIdCol:'_id'},
+						// {name:'name', label:'Product category', type:eFieldType.STRING},
+						{name:'title', label:'Title', type:'string'},
+						{name:'descr', label:'Description', type:'string'}
+					]
+				}, subTable:{
 					description:'',
-					name: 'Subtable2',
+					name: 'Subtable',
+					idCol:'_id',
+					tableType: eTableType.STANDARD,
+					fields:[
+						{name:'title', label:'Title', type:'string'},
+						{name:'descr', label:'Description', type:'string'},
+					]
+				}, subTable2:{
+					description:'This is subtable for above table, its entries also can have subtables  creating a subsubtable',
+					name: 'Sub Table',
 					idCol:'_id',
 					tableType: eTableType.SUBTABLE,
 					fields:[
 						{name:'title', label:'Title', type:'string'},
 						{name:'descr', label:'Description', type:'string'},
 					]
-				} */
-			}, categories:{
-				description:'Nested categories',
-				name: 'Categories',
-				idCol:'_id',
-				tableType: 'categories',
-				categoriesParentTitleField: 'title',
-				fields:[
-					{name:'__flexi_parent_cat', label:'Category reference', type:'catReference', refTable:'categories', refCol:'title', refIdCol:'_id'},
-					// {name:'name', label:'Product category', type:eFieldType.STRING},
-					{name:'title', label:'Title', type:'string'},
-					{name:'descr', label:'Description', type:'string'}
-				]
-			}, subTable:{
-				description:'',
-				name: 'Subtable',
-				idCol:'_id',
-				tableType: eTableType.STANDARD,
-				fields:[
-					{name:'title', label:'Title', type:'string'},
-					{name:'descr', label:'Description', type:'string'},
-				]
-			}, subTable2:{
-				description:'This is subtable for above entry',
-				name: 'Sub Table',
-				idCol:'_id',
-				tableType: eTableType.SUBTABLE,
-				fields:[
-					{name:'title', label:'Title', type:'string'},
-					{name:'descr', label:'Description', type:'string'},
-				]
-			}
-		}),
-		tables: 'fullTable,categories,subTable', 
-		defaultTable:'fullTable'
+				}
+			}),
+			tables: 'fullTable,categories,subTable', 
+			defaultTable:'fullTable'
+		}]
 	}
-	static searchIDandModify (data : Array<Object>, id, col, val) {
-		data.forEach((row:any, index) => {
+	static dbLocked: boolean = false;
+	static clearLocalDB () {
+		console.log('clearLocalDB')
+		AppUtils.storageRemove('flexiecms2019-db')
+		DemoData.dbLocked = true
+	}
+	static dbCheck () {
+		let db = AppUtils.storageGet('flexiecms2019-db')
+		if (db) DemoData.db = db
+		// let confCell = AppUtils.storageGet('flexiecms2019-confCell')
+		// if (confCell) DemoData.confCell = confCell
+		//return db
+	}
+	static dbSave () {
+		if (!DemoData.dbLocked) AppUtils.storageSave('flexiecms2019-db', DemoData.db)
+		// AppUtils.storageSave('flexiecms2019-confCell', DemoData.confCell)
+	}
+
+	// MUTATORS
+	static searchIDandModify (tableID : string, id, col, val) {
+		// DemoData.dbCheck()
+		DemoData.db[tableID].forEach((row:any, index) => {
 			if (row._id == id) {
 				row[col] = val
 			}
 		})
+		// DemoData.dbSave()
 	}
 	static query (tableID : string, event : string, data : any) : Promise<any> {
+		DemoData.dbCheck()
 		let res
 		let countRows = 0
 		
-		if (tableID == App.configTableName) {
+		res = DemoData.db[tableID]
+		/* if (tableID == App.configTableName) {
 			let temp = DemoData.confCell
 			res = [temp]
 		} else if (tableID == 'fullTable') {
@@ -120,11 +144,11 @@ export class DemoData {
 			res = DemoData.db[tableID]
 		} else if (tableID == 'subTable2') {
 			res = DemoData.db[tableID]
-		}
+		} */
 
-		if (event == 'updateOne') {
+		if (event == 'updateOne' || event == 'serverItemUpdate') {
 			//console.error(res, data.id.id, data.col, data.val)
-			DemoData.searchIDandModify(res, data.id.id, data.col, data.val)
+			DemoData.searchIDandModify(tableID, data.id.id, data.col, data.val)
 			res = {modifiedCount:1}
 		} else if (event == 'aggregateCount') {
 			res = [{count:res.length}]
@@ -141,6 +165,8 @@ export class DemoData {
 			res = {insertedId:insID}
 		}
 		console.info('demo-query', tableID, event, data, res)
+		console.log(DemoData.db)
+		DemoData.dbSave()
 		return new Promise((resolve, reject) => {	resolve(res) })
 	}
 }

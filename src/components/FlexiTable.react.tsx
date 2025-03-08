@@ -51,13 +51,13 @@ export class FlexiTableReact extends React.Component<{store:iSTORE, table:iFlexi
 		let tableStyle = 'table-style-0'
 		if (this.props.table?.conf?.tableType == eTableType.SUBTABLE) {
 			tableWrap = ""
-			margins =  ''
+			margins =  '12px 0 0 0'
 			tableStyle = 'table-style-1'
 		}
 		// if (this.props.table.conf.fields.has(App.FIELD_PARENT)) {
 			// tableWrap = ''; margins = '0'
 		// }
-		return <div className={tableWrap}><div style={{margin:margins}} dangerouslySetInnerHTML={{__html:description}} /><table className={tableStyle}><tbody>
+		return <div className={tableWrap}><div className="description" style={{margin:margins}}>{description}</div><table className={tableStyle}><tbody>
 			<FlexiTableCaptionReact store={this.props.store} table={table} rowParentID={this.props.rowParentID} />
 			{tbody}</tbody></table>
 		</div>;

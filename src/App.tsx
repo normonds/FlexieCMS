@@ -113,7 +113,6 @@ export class App {
 
 		FlexiTableStatic.subscribeToEvents(App.emiter);
 		/*App.STORE.appList = [
-			{id:'ritmainstituts-shop-rafyj', db:'ritmainstituts-shop'}
 			,{id:'ri-stitch-piwyk', db:'db'}
 			, {id:'flexi-cms-app', db:'flexi-cms-conf'}
 		];*/
@@ -154,8 +153,6 @@ export class App {
 				App.STORE.appDB = cookieAppActive[1];
 			} else {
 				console.log('not reading cookie', window.location.pathname);
-				// if (!App.STORE.appID) App.STORE.appID = 'ritmainstituts-shop-rafyj';
-				// if (!App.STORE.appDB) App.STORE.appDB = 'ritmainstituts-shop';
 				// if (!App.STORE.appID)
 					App.STORE.appID = App.STORE.adminApp.id;
 				// if (!App.STORE.appDB)
@@ -179,11 +176,8 @@ export class App {
 		}  */
 		//App.STORE.authorizedEmail = 'user@domain.com'
 		// App.STORE.authorizedName = 'user'
-		AuthStitch.anonLoggedin = true
-		AuthStitch.renderLogin()
-			// if (AuthStitch.anonLoggedin) {
-		// App.userAuthorized()
-		App.update()
+
+		
 		//App.emit(new EventApp(EventApp.nm.TablesList, App.STORE.configDB.tables.split(',')));
 		/*App.emiter.on(EventApp.nm.TableGetRequest, ()=>{
 			console.log('emitting', EventServer.nm.Table)
@@ -195,7 +189,14 @@ export class App {
 				
 			))
 		}) */
-		console.log('App.init()')
+		if (AppUtils.storageGet('flexiecms2019-anonLogin')) {
+			AuthStitch.anonLogin()
+		}
+		// 
+		// AuthStitch.anonLoggedin = true
+		// AuthStitch.renderLogin()
+		// App.update()
+		console.log('App.init() end')
 	}
 
 	static windowPopState (eve) {
@@ -291,7 +292,7 @@ export class App {
 		App.update();
 	}
 	static userAuthorized (email :string) {
-		//console.log('user auth');
+		console.log('userAuthorized, email', email);
 		App.STORE.isAuthorized = true;
 		App.STORE.authorizedName = email;
 		App.STORE.authorizedEmail = email;

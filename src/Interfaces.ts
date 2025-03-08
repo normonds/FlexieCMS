@@ -2,8 +2,8 @@ import { iCategoriesReference } from "./cells/CellCatReference";
 import * as React from "react";
 
 export class eCookie {
-	static APP_LIST : string = '__flexi_app_list';
-	static APP_ACTIVE : string = '__flexi_app_active';
+	static APP_LIST : string = 'flexiecms2019-appList';
+	static APP_ACTIVE : string = 'flexiecms2019-appActive';
 }
 export class WarningLevel {
 	static ERROR : string = 'error'

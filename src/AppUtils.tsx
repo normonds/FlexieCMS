@@ -114,6 +114,9 @@ export class AppUtils {
 		var expires = "expires="+ d.toUTCString();
 		document.cookie =  name_+"=" + value + ";" + expires + ";path=/";
 	}*/
+	static storageRemove (key : string) {
+		localStorage.removeItem(key)
+	}
 	static storageSave (key :string, value :any) {
 		localStorage.setItem(key, JSON.stringify(value));
 	}

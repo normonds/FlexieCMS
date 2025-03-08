@@ -5,6 +5,8 @@ import { AuthReact } from "./Auth.react";
 import { App } from "../App";
 import { AppUtils } from "../AppUtils";
 import { iFlexiHeaderTab, iSTORE } from "../Interfaces";
+import { AuthStitch } from "./AuthStitch";
+import { DemoData } from "./DemoData";
 
 
 export class Header extends React.Component<{store:iSTORE}, {}> {
@@ -42,6 +44,12 @@ tabDoubleClick (tableID :string, e) { let _:this = this;
 toggleSettings (e) {
 	App.emit(EventApp.TOGGLE_SETTINGS);
 }
+restSampleData (e) {
+	if (confirm('Restore sample data?')){
+		DemoData.clearLocalDB()
+		setTimeout(()=>{window.location.reload()}, 500)
+	}
+}
 
 render () {
 	//console.warn(this.props.store.header.tableTabs[0]);
@@ -57,6 +65,7 @@ render () {
 																					 onClick={this.tabClick.bind(this, tab.codename)} onDoubleClick={this.tabDoubleClick.bind(this, tab.codename)}>{tab.label}</a></li>);
 		}
 	});
+	let clearLocalDB = <>restore sample data</>
 	let devModeLabel = 'dev mode';
 	let toogleRootLabel = this.props.store.isDevMode ? <span>dev mode</span> : <span style={{opacity:0.2}}>dev mode</span>;
 	let deLabel = 'DE';
@@ -66,9 +75,11 @@ render () {
 	if (!this.props.store.isDevMode) {
 		deLabelOff = <React.Fragment>de</React.Fragment>
 		rawLabelOff = <span style={{fontSize:'90%', opacity:0.2}}>raw data</span>
+		//clearLocalDB = <></>
 	}
 
 	//this.tables.push(<li></li>);
+	//if (!AuthStitch.anonLoggedin) { toogleRootLabel = rawLabelOff = rawLabel = <></>; }
 	return <div id="header"><ul className='tableList'>{this.tables}</ul>
 		<AuthReact store={this.props.store}/>
 		{/* <a className="material-icons" onClick={this.toggleSettings.bind(this)} href="#" style={{fontSize:'18px', position:'relative', top:'5px'}}>settings</a> */}
@@ -81,6 +92,7 @@ render () {
 			? rawLabel : <React.Fragment>{rawLabelOff}</React.Fragment>}</a>
 		{/* <a href="#" className="devToggle" onClick={()=>{App.log(App.STORE)}}>{this.props.store.isDevMode
 			? 'L' : <React.Fragment></React.Fragment>}</a> */}
+			<a href="#" className="devToggle"  style={{fontSize:'90%', opacity:0.2}} onClick={this.restSampleData.bind(this)}>{clearLocalDB}</a>
 	</div>;
 
 }

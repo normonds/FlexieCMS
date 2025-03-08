@@ -119,7 +119,7 @@ static onServerTableData (eve : EventServer) {
 	
 	let reqData:iAppEvent = eve.eventRequest.data;
 	let table:iFlexiTable = FlexiTableStatic.parse(eve);
-	console.log('onServerTableData', table, reqData, eve)
+	//console.log('onServerTableData', table, reqData, eve)
 
 	FlexiTableStatic.updateAppListCookie(table);
 	//console.log('TABLE parse', reqData.tableType, tableID);
@@ -180,9 +180,9 @@ static newTableConfs (rowsPerPage ?:number, maxFieldChars ?:number) : iFlexiTabl
 	// if (App.dbType==DBType.MONGODB) {
 	// 	idCol = '_id';
 	// }
-	if (!rowsPerPage)  rowsPerPage = 50;
-	if (!maxFieldChars)  maxFieldChars = 50;
-	let conf : iFlexiTableConfs = {//flexiAppMetaTable:null, rowsPerPage:50, maxFieldChars:100, showFullTexts:false};
+	if (!rowsPerPage)  rowsPerPage = 50
+	if (!maxFieldChars)  maxFieldChars = 50
+	let conf : iFlexiTableConfs = { //flexiAppMetaTable:null, rowsPerPage:50, maxFieldChars:100, showFullTexts:false};
 		description : '',
 		rowCount :-1,
 		showFullTexts: false,
@@ -210,7 +210,7 @@ static onCountRows (eve :EventServer) {
 	if (!Number.isInteger(eve.data.dbObj as number)) return;
 	FlexiTableStatic.conf(tableID).rowCount = eve.data.dbObj as number;
 	//App.STORE.tables[tableID].maxRows =
-	console.log(FlexiTableStatic.conf(tableID).rowCount);
+	//console.log(FlexiTableStatic.conf(tableID).rowCount);
 	App.update();
 }
 static loadTable (tableID :string, tableType :eTableType, forced: boolean = false) {

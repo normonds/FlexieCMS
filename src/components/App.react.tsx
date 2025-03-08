@@ -63,7 +63,7 @@ static config = {
 };
 static confServer:iConfServer;
 
-static db : string = 'ritmainstituts-shop';
+static db : string = '';
 static curr : AppReact;
 //static defaultTable : string = '__flexi_conf';
 // static viewAsRoot = false;
@@ -111,7 +111,6 @@ componentDidMount () { AppReact.verb('App mount'); }
 deleteUnusedImgsReq (aStr : Array<string>) {
 	//http://localhost:5002/flexi-cms/us-central1/getAllFlexiFiles
 	// let url  = 'http://localhost:5002/flexi-cms/us-central1/getAllFlexiFiles';
-	let url = 'https://europe-west1-ritmainstituts-lv.cloudfunctions.net/getAllFlexiFiles';
 	axios.post(url, {files:aStr}).then(function (response) {
 		//AppReact.info('response', FlexiMongoXHR.url, response);
 		console.log('deleteUnusedImgsReq', response.data);
@@ -145,7 +144,7 @@ runFileFindOnDB (files : Array<string>, toDelete, startTime) {
 	}
 }
 findNonReferencedImagesInDB () { let _ = this;
-	axios.get('https://europe-west1-ritmainstituts-lv.cloudfunctions.net/getAllFlexiFiles').then(function (response) {
+	axios.get('https://europe-west1.cloudfunctions.net/getAllFlexiFiles').then(function (response) {
 		//AppReact.info('response', FlexiMongoXHR.url, response);
 		console.log(typeof response.data, response.data);
 		if (AppUtils.isArray(response.data)) {
@@ -207,7 +206,17 @@ render () {
 		out.push(<div key="emptyConfigWarning" className="tableWrap">Config table is found but empty <button onClick={FlexiTableStatic.createEmptyConfigRow}>Create Config table with default values</button></div>);
 	}
 	if (!this.props.store.authorizedEmail) {
-		out.push(<div className="tableWrap" key="about">Flexie CMS is open source software. <a target="_blank" href="https://github.com/normonds/flexiecms">View this project on github.com</a></div>);
+		out.push(<div className="tableWrap" key="about">Flexie CMS is partially-finished/abandoned react cms system made
+		 in 2019 intended to be database agnostic and work with various database backends through connectors. First backend connector was made to work with MongoDB database using its cloud application platform MongoDB Realms (then called Stitch). <a target="_blank" href="https://github.com/normonds/flexiecms-2019">View this project on 
+		 github.com</a><br/><br/>It is now in demo mode using local storage with sample data.<br/>
+		 <b>&bull; DEV mode</b> (button near login) - turns on database names for columns and shows field
+		  types. Information for these fields and various cms settings is stored in __flexi_conf table. 
+		  CMS was intended to be used by average web users in client mode (default) 
+		 or DEV MODE (click it near the login button) for developers<br/>
+		 
+		 <b>&bull; RAW mode</b> (click it near the login button) : it shows uprocessed database fields
+		 </div>);
+
 	}
 	if (this.props.store.showSettings) {
 		out.push(this.showSettings());

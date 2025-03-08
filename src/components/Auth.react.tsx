@@ -6,9 +6,9 @@ import { iSTORE } from "../Interfaces";
 export class AuthReact extends React.Component<{store:iSTORE} ,{}> {
 
 constructor (props) { super(props); }
-logout	 			(e : MouseEvent) {		App.emit(EventApp.REACT_AUTH_LOGOUT);		}
-login					 (e : MouseEvent) {		App.emit(EventApp.REACT_AUTH_LOGIN);			}
-loginAnon		 (e : MouseEvent) {		App.emit(EventApp.REACT_AUTH_LOGIN_ANONYMOUS);			}
+logout			(e : MouseEvent) {		App.emit(EventApp.REACT_AUTH_LOGOUT);		}
+login				(e : MouseEvent) {		App.emit(EventApp.REACT_AUTH_LOGIN);			}
+loginAnon		(e : MouseEvent) {		App.emit(EventApp.REACT_AUTH_LOGIN_ANONYMOUS);			}
 render () {
 	let anonLogin = this.props.store.adminAllowAnonUsers
 		? <button onClick={this.loginAnon.bind(this)}>Anonymous Login</button> : <React.Fragment/>;
