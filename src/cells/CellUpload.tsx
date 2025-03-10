@@ -262,7 +262,7 @@ export class CellUploadIcon extends React.Component
 					 className={this.props.parent.selectFilesOver ? 'dragOverLeft' : ''}
 					 id={this.idIcon()}
 					 onMouseUp={this.onMouseUp.bind(this)} onMouseOver={this.onMouseMove.bind(this)}
-					 onMouseOut={this.onMouseOut.bind(this)}>{/* <input type="file" accept="image/*" multiple
+					 onMouseOut={this.onMouseOut.bind(this)}>File uploads are disabled{/* <input type="file" accept="image/*" multiple
 																	onChange={this.props.parent.filesSelected.bind(this.props.parent)}/> */}</span>;
 	}
 

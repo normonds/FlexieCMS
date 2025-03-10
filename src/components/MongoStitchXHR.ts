@@ -172,9 +172,10 @@ export class MongoStitchXHR {
 		} else if (eveApp.eventName == EventApp.nm.reqCell) {
 			let reqData:iAppEvent = eveApp.data;
 			let query = eveApp.data.query ? eveApp.data.query : {$match:{[MongoStitchXHR.idField]:new ObjectID(reqData.id)}};
-			AuthStitch.refDB.collection(eveApp.data.tableID).aggregate(
+			DemoData.query(eveApp.data.tableID, 'TableGetRequest',
+			//AuthStitch.refDB.collection(eveApp.data.tableID).aggregate(
 				[query,{$project:{[reqData.col]:1}},{$skip:eveApp.data.skip || 0}, {$limit:eveApp.data.limit || 100}])
-				.asArray().then((res: any) => {
+				./* asArray(). */then((res: any) => {
 				MongoStitchXHR.processResponse({__flexi_servEve: EventServer.nm.Cell, dbObj: res, __flexidb_duration:-1}, eveApp, startTime);
 			}).catch(e => {	App.logError(e);	});
 		// GET TABLE ROWS

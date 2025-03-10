@@ -181,11 +181,11 @@ static newTableConfs (rowsPerPage ?:number, maxFieldChars ?:number) : iFlexiTabl
 	// 	idCol = '_id';
 	// }
 	if (!rowsPerPage)  rowsPerPage = 50
-	if (!maxFieldChars)  maxFieldChars = 50
+	if (!maxFieldChars)  maxFieldChars = 300
 	let conf : iFlexiTableConfs = { //flexiAppMetaTable:null, rowsPerPage:50, maxFieldChars:100, showFullTexts:false};
 		description : '',
 		rowCount :-1,
-		showFullTexts: false,
+		showFullTexts: true,
 		maxFieldChars: maxFieldChars,
 		flexiAppMetaTable: null,
 		onInsertNewAddAuthEmailToField: null,

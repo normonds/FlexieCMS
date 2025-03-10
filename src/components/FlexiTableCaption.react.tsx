@@ -199,6 +199,7 @@ render () {
 			 	onBlur={this.searchInputBlur.bind(this)}
 				onFocus={this.searchInputFocus.bind(this)}
 			type="text" value={this.state.searchTerm}/></React.Fragment>;
+		searchBar = <></>
 	let addMaxItems = this.props.table.conf.rowCount>-1 ? "/"+this.props.table.conf.rowCount : '';
 	let length = this.props.table.rows.length ? this.props.table.rows.length+addMaxItems+' items' : '';
 	return<tr><th className={[...classNames].join(' ')} colSpan={this.props.table.cols.size+1} style={{textAlign:'left'}}>
@@ -207,7 +208,7 @@ render () {
 		&nbsp;&nbsp;<span style={{fontWeight:'normal', fontSize:'100%'}}>{length}</span>
 
 		&nbsp;{showFullTexts}{searchBar}
-		&nbsp;<i style={{opacity:0.3, fontWeight:'normal', fontSize:'80%'}}>{this.props.table.reqDuration}ms</i>
+		&nbsp;<i style={{opacity:0.0, fontWeight:'normal', fontSize:'80%'}}>{this.props.table.reqDuration}ms</i>
 		&nbsp;{buttonAddCol}&nbsp;{this.genPages()}
 	</th></tr>;
 }

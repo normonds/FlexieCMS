@@ -387,10 +387,8 @@ render () { let _:FlexiTableCellReact<P> = this;
 					&& !this.props.table.conf.showFullTexts && out.length>this.props.table.conf.maxFieldChars) {
 					shortenedOutText = out.substr(0, this.props.table.conf.maxFieldChars) + ' ...';
 				}
-
 			}
 		}
-
 	}
 
 	if (cell.inTransition) this.classNames.add('inTransition');

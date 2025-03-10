@@ -7,13 +7,11 @@ export class DemoData {
 	static db = {
 		fullTable : [
 			{_id:"507f191e810c19729de860ea", category:'67c9c908b3c3a282025b1594', radios:'67c9f0a16765ef96c9ffa5b7', title:'Dress'
-				, descr:'Dress for your pleasures', images:[]}
+				, descr:'Lorem ipsum <b>dolor sit amet</b>, consectetur adipiscing elit. Phasellus quis feugiat turpis, eu ullamcorper arcu. Proin blandit maximus est sit amet molestie. Vivamus maximus auctor nibh at pretium. Praesent vehicula placerat diam quis blandit. In ac mollis purus. Vestibulum vel felis in sem pretium hendrerit ac quis purus. Sed lacus ligula, aliquet eu velit in, tempor auctor tortor. Praesent aliquet in dolor ac blandit. Mauris sed urna in eros dictum faucibus. Curabitur aliquet sapien ligula, non laoreet nibh tincidunt non.'
+				, checkbox: ["67c9f0a846c218febaf1d512","67c9f09691a5c340f0014bbb"]
+				, images:['/andromeda.jpg','/sun.jpg','/cloud.jpg']}
 			, {_id:"507f1f77bcf86cd799439011", category:'67c9c90f4eb1b39a3d1861e1', radios:'67c9f0a846c218febaf1d512', title:'Pants'
-				, descr:'Comfy Pants for everyday', images:[
-					'/cat.jpg',
-					'/cat2.jpg',
-					'/cat3.jpg'
-				]}
+				, descr:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis feugiat turpis, eu ullamcorper arcu. Proin blandit maximus est sit amet molestie. Vivamus maximus auctor nibh at pretium. Praesent vehicula placerat diam quis blandit. In ac mollis purus. Vestibulum vel felis in sem pretium hendrerit ac quis purus. Sed lacus ligula, aliquet eu velit in, tempor auctor tortor. Praesent aliquet in dolor ac blandit. Mauris sed urna in eros dictum faucibus. Curabitur aliquet sapien ligula, non laoreet nibh tincidunt non.', images:['/earth.jpg','/carina.jpg','/colony.jpg']}
 		],
 		categories : [
 			{_id:"67c9c3a7acc66c58fce1f4b7", __flexi_parent_cat:'', title:'Dresses', descr:'All dresses'}
@@ -28,14 +26,14 @@ export class DemoData {
 			, {_id:"67c9c3b2210f5c9029b98877", __flexi_parent_cat:'', title:'Pants', descr:'Category for pants'}
 		],
 		subTable : [
-			{_id:"67c9f09691a5c340f0014bbb", title:'Title 1', descr:'1'}
-			, {_id:"67c9f0a16765ef96c9ffa5b7", title:'Title 2', descr:'2'}
-			, {_id:"67c9f0a846c218febaf1d512", title:'Title 3', descr:'3'}
+			{_id:"67c9f09691a5c340f0014bbb", title:'S', descr:'Small'}
+			, {_id:"67c9f0a16765ef96c9ffa5b7", title:'M', descr:'Medium'}
+			, {_id:"67c9f0a846c218febaf1d512", title:'L', descr:'Large'}
 		],
 		subTable2 : [
-			{_id:"67c9f09691a5c340f0014bba", __flexi_parent:'507f191e810c19729de860ea', title:'Title 11', descr:'11'}
-			, {_id:"67c9f0a16765ef96c9ffa5b6",  __flexi_parent:'507f1f77bcf86cd799439011', title:'Title 22', descr:'22'}
-			, {_id:"67c9f0a846c218febaf1d511",  __flexi_parent:'507f191e810c19729de860ea', title:'Title33', descr:'33'}
+			{_id:"67c9f09691a5c340f0014bba", __flexi_parent:'507f191e810c19729de860ea', title:'Title1', descr:'Descr1'}
+			, {_id:"67c9f0a16765ef96c9ffa5b6",  __flexi_parent:'507f1f77bcf86cd799439011', title:'Title2', descr:'Descr2'}
+			, {_id:"67c9f0a846c218febaf1d511",  __flexi_parent:'507f191e810c19729de860ea', title:'Title3', descr:'Descr3'}
 		],
 		__flexi_conf : [{
 			tablesConf:JSON.stringify({
@@ -45,9 +43,12 @@ export class DemoData {
 					idCol:'_id',
 					tableType: eTableType.FULL,
 					cellDirection : 'vertical',
+					showFullTexts: true,
+					maxFieldChars: 9999,
 					fields:[
 						{name:'category', label:'Category (complex nested select field using entries from another table)', type:'catReference', refTable:'categories', refCol:'title', refIdCol:'_id'},
 						{name:'radios', label:'single select field using entries from another table', type:'catReference', refTable:'subTable', refCol:'title', refIdCol:'_id', settings:'radio'},
+						{name:'checkbox', label:'single select field using entries from another table', type:'catReference', refTable:'subTable', refCol:'title', refIdCol:'_id', settings:'checkbox'},
 						{name:'title', label:'Title (simple field)', type:'string'},
 						{name:'descr', label:'Description (simple field)', type:'string'},
 						{name:'images', label:'Images (file upload field)', type:'fileUpload'},
@@ -76,7 +77,7 @@ export class DemoData {
 						{name:'descr', label:'Description', type:'string'}
 					]
 				}, subTable:{
-					description:'',
+					description:'This table is meant to be referenced in other table\'s fields like checkbox or radio selection',
 					name: 'Subtable',
 					idCol:'_id',
 					tableType: eTableType.STANDARD,
@@ -85,7 +86,7 @@ export class DemoData {
 						{name:'descr', label:'Description', type:'string'},
 					]
 				}, subTable2:{
-					description:'This is subtable for above table, its entries also can have subtables  creating a subsubtable',
+					description:'This is subtable for above table, its entries also can have subtables creating a subsubtable',
 					name: 'Sub Table',
 					idCol:'_id',
 					tableType: eTableType.SUBTABLE,
